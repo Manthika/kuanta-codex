@@ -4,8 +4,8 @@
 <section class="cards-section" aria-labelledby="cards-title">
   <div class="container">
     <h2 id="cards-title" class="cards-title">
-      Low-Latency and High-Performance,<br class="br-tab" />
-      Yet Programmable,<br class="br-tab" />
+      Low-Latency and High-Performance,<br />
+      Yet Programmable,<br />
       Making it Flexible.
     </h2>
   </div>
@@ -71,7 +71,7 @@
   .cards-title{
     margin: 0 0 clamp(18px,4vw,36px);
     text-align: center;
-    font-family: "Vitro Core", system-ui, sans-serif;
+    font-family: "VITRO CORE";
     font-size: clamp(18px,3.4vw,28px);
     font-weight: 900;
     line-height: 175%;
@@ -79,7 +79,7 @@
     background: linear-gradient(90deg, #4A3BFF 0%, #000C4A 100%);
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   }
-  .br-tab{ display:none; }
+  
 
   /* Layout
      - Mobile: vertical stack
@@ -110,7 +110,7 @@
       flex: 0 0 calc((100% - var(--gap) - var(--peek)) / 2); /* ~2.5 visible */
       scroll-snap-align: start;
     }
-    .br-tab{ display:inline; }
+    
   }
 
   @media (min-width: 1024px){
