@@ -51,9 +51,10 @@ body {
 	line-height: 1.7;
 }
 main {
-	max-width: calc(100% - 2em);
+	max-width: 100%;
 	margin: auto;
-	padding: 3em 1em;
+	padding: 0;
+	background-color: #fff;
 }
 h1,
 h2,
