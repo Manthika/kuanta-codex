@@ -60,3 +60,8 @@ Check out [our documentation](https://docs.astro.build) or jump into our [Discor
 ## Credit
 
 This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+
+## Custom fonts
+
+The UI references the [Vitro Core](https://www.freefontdownload.org/en/vitro-core.font) typeface. Add the `vitro-core.otf` file to
+`public/fonts/` so that the bundled styles can load it at runtime.
