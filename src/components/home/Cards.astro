@@ -1,0 +1,172 @@
+---
+/* 3-card section; uses your images and typography */
+---
+<section class="cards-section" aria-labelledby="cards-title">
+  <div class="container">
+    <h2 id="cards-title" class="cards-title">
+      Low-Latency and High-Performance,<br class="br-tab" />
+      Yet Programmable,<br class="br-tab" />
+      Making it Flexible.
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="cards-viewport">
+      <div class="cards-track">
+        <!-- PMR -->
+        <article class="card">
+          <img class="card__img" src="/images/home/pmr.jpg" alt="PMR preview" />
+          <div class="card__body">
+            <h3 class="card__title">PMR</h3>
+            <p class="card__desc">
+              Flexible configuration schemes and programming interfaces allow you to design a single
+              message architecture that responds consistently to all messages.
+            </p>
+            <a class="card__more" href="#">Read more →</a>
+          </div>
+        </article>
+
+        <!-- KAS -->
+        <article class="card">
+          <img class="card__img" src="/images/home/kas.jpg" alt="KAS preview" />
+          <div class="card__body">
+            <h3 class="card__title">KAS</h3>
+            <p class="card__desc">
+              A micro-application service that supports vertical/horizontal unit business expansion
+              without restrictions on cloud and on-premises.
+            </p>
+            <a class="card__more" href="#">Read more →</a>
+          </div>
+        </article>
+
+        <!-- BROKER -->
+        <article class="card">
+          <img class="card__img" src="/images/home/broker.jpg" alt="Broker preview" />
+          <div class="card__body">
+            <h3 class="card__title">BROKER</h3>
+            <p class="card__desc">
+              A Pub/Sub-based message broker supporting diverse topologies, high-speed messaging
+              processing, and reliable recovery and retransmission.
+            </p>
+            <a class="card__more" href="#">Read more →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cards-section{ padding: clamp(28px, 6vw, 80px) 0; background:#FDFDFF; }
+
+  .container{
+    width: min(1200px, 100%);
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+  @media (min-width: 768px){ .container{ padding-inline: 32px; } }
+  @media (min-width:1024px){ .container{ padding-inline: 50px; } }
+
+  /* Heading (your spec) */
+  .cards-title{
+    margin: 0 0 clamp(18px,4vw,36px);
+    text-align: center;
+    font-family: "VITRO CORE TTF", system-ui, sans-serif;
+    font-size: clamp(18px,3.4vw,28px);
+    font-weight: 900;
+    line-height: 175%;
+    letter-spacing: -0.56px;
+    background: linear-gradient(90deg, #4A3BFF 0%, #000C4A 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .br-tab{ display:none; }
+
+  /* Layout
+     - Mobile: vertical stack
+     - Tablet: horizontal scroll with ~2.5 cards
+     - Desktop: 3 columns, no scroll */
+  .cards-viewport{ overflow: visible; }
+  .cards-track{
+    --gap: 16px;
+    display: flex;
+    flex-direction: column;   /* mobile default */
+    gap: var(--gap);
+  }
+
+  @media (min-width: 768px) and (max-width: 1023.98px){
+    .cards-viewport{
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 8px;
+    }
+    .cards-track{
+      flex-direction: row;
+      --peek: 20%;                   /* next-card peek size */
+      gap: var(--gap);
+    }
+    .card{
+      flex: 0 0 calc((100% - var(--gap) - var(--peek)) / 2); /* ~2.5 visible */
+      scroll-snap-align: start;
+    }
+    .br-tab{ display:inline; }
+  }
+
+  @media (min-width: 1024px){
+    .cards-viewport{ overflow: visible; }
+    .cards-track{
+      flex-direction: row;
+      --gap: 22px;
+      gap: var(--gap);
+    }
+    .card{
+      flex: 0 0 calc((100% - 2 * var(--gap)) / 3);           /* 3 equal columns */
+    }
+  }
+
+  /* Card visuals + type */
+  .card{
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 10px 24px rgba(0,0,0,.08);
+    overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .card__img{ width:100%; height:200px; object-fit:cover; display:block; }
+  @media (min-width:768px){ .card__img{ height:220px; } }
+  @media (min-width:1024px){ .card__img{ height:240px; } }
+
+  .card__body{ padding:14px 16px 16px; }
+
+  .card__title{
+    margin:0 0 6px;
+    color:#000C4A;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: clamp(18px,2.4vw,24px);
+    font-style: italic; font-weight:900; line-height:145%;
+    letter-spacing:-0.48px;
+  }
+  .card__desc{
+    margin:0 0 10px;
+    color:#646471;
+    font-family:"VITRO CORE TTF", system-ui, sans-serif;
+    font-size: clamp(13px,2vw,14px);
+    font-weight:900; line-height:150%; letter-spacing:-0.14px;
+  }
+  .card__more{
+    color:#000C4A;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: clamp(15px,2.2vw,18px);
+    font-style: italic; font-weight:700; line-height:145%;
+    letter-spacing:-0.09px; text-decoration:none; display:inline-block;
+  }
+  .card__more:hover{ text-decoration: underline; }
+
+  /* Optional thinner scrollbar on tablet */
+  @media (min-width:768px) and (max-width:1023.98px){
+    .cards-viewport::-webkit-scrollbar{ height:8px; }
+    .cards-viewport::-webkit-scrollbar-thumb{ background:rgba(0,0,0,.2); border-radius:999px; }
+    .cards-viewport{ scrollbar-width:thin; scrollbar-color:rgba(0,0,0,.25) transparent; }
+  }
+</style>

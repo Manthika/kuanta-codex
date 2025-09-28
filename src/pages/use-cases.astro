@@ -1,0 +1,215 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const intro = {
+  heading: "POWERED BY",
+  heroImg: "/images/use-cases/use-cases-hero.jpg",
+};
+
+const cases = [
+  {
+    id: "daishin",
+    titleLines: ["Daishin Securities", "Kuanta Solutions"],
+    desc:
+      "Discover Kuanta’s Features, built with reliable and advanced architecture for volatile markets, offering a consistent single messaging framework and flexible data pipelines.",
+    image: "/images/use-cases/daishin.jpg",
+    href: "#",
+    reverseOnDesktop: false,
+  },
+  {
+    id: "woori",
+    titleLines: ["WOORI INVESTMENT", "SECURITIES Kuanta", "Solutions"],
+    desc:
+      "Discover Kuanta’s Features, built with reliable and advanced architecture for volatile markets, offering a consistent single messaging framework and flexible data pipelines.",
+    image: "/images/use-cases/woori.jpg",
+    href: "#",
+    reverseOnDesktop: true,
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+
+  <body>
+    <Header />
+
+    <!-- HERO -->
+    <section class="hero" role="img" aria-label="Powered by">
+      <h1 class="hero__title">{intro.heading}</h1>
+    </section>
+
+    <!-- CASES -->
+    <main class="cases">
+      {cases.map((c) => (
+        <section class={"case" + (c.reverseOnDesktop ? " case--reverse" : "")} id={c.id}>
+          <figure class="case__media">
+            <img src={c.image} alt={`${c.titleLines[0]} showcase`} />
+          </figure>
+
+          <div class="case__content">
+            <h2 class="case__title">
+              {c.titleLines.map((line) => (<span class="case__line">{line}</span>))}
+            </h2>
+            <p class="case__desc">{c.desc}</p>
+            <a href={c.href} class="btn">Learn</a>
+          </div>
+        </section>
+      ))}
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+
+<style>
+  /* Body + tokens */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+  :root{
+    --xpad: clamp(16px, 4vw, 48px);
+    --vpad: clamp(24px, 5vw, 80px);
+    --accent: #4A3BFF;
+    --ink: #222734;
+    --muted: #5a5e6b;
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(0,0,0,.08);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #FDFDFF; color: var(--ink); font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+
+  /* ================= HERO ================= */
+  .hero{
+    height: 356px;
+    align-self: stretch;
+    background: url("/images/use-cases/use-cases-hero.jpg") lightgray 50% / cover no-repeat;
+    position: relative;
+    display: grid;
+    align-items: center; /* vertically middle */
+    padding: 0 var(--xpad);
+  }
+  .hero__title{
+    margin: 0;
+	color: #FFF;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+	font-family: Inter;
+	font-size: clamp(52px, 10vw, 77px);
+	font-style: italic;
+	font-weight: 900;
+	line-height: 110%; /* 84.7px */
+	letter-spacing: -0.77px;
+
+	white-space: normal;           /* undo any inherited nowrap */
+	overflow-wrap: anywhere;       /* last-resort breaking if needed */
+	text-wrap: balance;   
+  }
+
+  /* ================= MUI-like CONTAINER =================
+     Matches MUI Container widths/paddings across breakpoints */
+  .cases{
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+	margin-top: 30px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: var(--vpad);
+    padding-bottom: calc(var(--vpad) + 24px);
+
+    display: grid;
+    gap: clamp(44px, 7vw, 120px);
+  }
+  @media (min-width: 600px){ .cases{ max-width: 600px; } }
+  @media (min-width: 900px){ .cases{ max-width: 900px; } }
+  @media (min-width:1200px){ .cases{ max-width:1200px; } }
+  @media (min-width:1536px){ .cases{ max-width:1536px; } }
+
+  /* ================= CASE ================= */
+  .case{
+    display: grid;
+    gap: clamp(20px, 4vw, 48px);
+    align-items: center;
+  }
+  .case__media{
+    margin: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .case__media > img{
+    display: block;
+    width: 100%;
+    height: clamp(220px, 40vw, 420px);
+    object-fit: cover;
+  }
+
+  .case__title{ margin: 0 0 10px; }
+  .case__title .case__line{
+    display: block;
+    background: linear-gradient(90deg, #000C4A 0%, #4A3BFF 95.6%);
+    background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-family: "VITRO CORE TTF", "Russo One", system-ui, sans-serif;
+    font-size: 36px; font-weight: 900; line-height: 160%; text-transform: capitalize;
+    letter-spacing: -0.01em;
+  }
+
+  .case__desc{
+    margin: 6px 0 18px;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 56ch;
+  }
+
+  .btn{
+    display: inline-block;
+    padding: 11px 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    font: italic 600 15px/1 "Inter", system-ui, sans-serif;
+    color: #fff;
+    background: linear-gradient(180deg, #6b5af7, #4f46e5);
+    box-shadow: 0 8px 18px rgba(79,70,229,.25);
+    transition: transform .08s ease, filter .15s ease;
+  }
+  .btn:hover{ filter: brightness(1.06); transform: translateY(-1px); }
+
+  /* ====== Tablet grid (kept as 1:1) ====== */
+  @media (min-width: 768px){
+    .case{
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(28px, 5vw, 56px);
+    }
+    .case--reverse{ grid-auto-flow: dense; }
+    .case--reverse .case__content{ grid-column: 1; }
+    .case--reverse .case__media  { grid-column: 2; }
+    .case__media > img{ height: clamp(360px, 34vw, 460px); }
+  }
+
+  /* ====== Desktop grid: 5 | 2 (gap) | 5 ======
+         12 equal columns; we leave cols 6–7 empty as the gap */
+  @media (min-width: 1200px){
+    .case{
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 0;   /* gap is created by the empty columns 6–7 */
+      row-gap: 32px;
+      align-items: start;
+    }
+
+    /* default order: media left (1–5), content right (8–12) */
+    .case__media   { grid-column: 1 / span 5; }
+    .case__content { grid-column: 8 / span 5; }
+
+    /* reversed order: content left, media right */
+    .case--reverse .case__content { grid-column: 1 / span 5; }
+    .case--reverse .case__media   { grid-column: 8 / span 5; }
+  }
+</style>

@@ -1,0 +1,296 @@
+---
+/** Usage: <Header /> — single file, no deps */
+const LINKS = [
+  { label: 'Get started', href: '/get-started' },
+  { label: 'Docs',        href: '/docs' },
+  { label: 'Product',     href: '/product' },
+  { label: 'Use Cases',   href: '/use-cases' },
+  { label: 'Blog',        href: '/blog' }
+] as const;
+
+const LANGS = [
+  { code: 'en', label: 'ENG', flag: '🇺🇸' },
+  { code: 'ko', label: 'KOR', flag: '🇰🇷' }
+] as const;
+
+const CURRENT_LANG = 'en';
+const drawerId = 'hdr-drawer';
+---
+
+<header class="header" data-component="header">
+  <div class="container">
+    <!-- Left: Logo -->
+    <a class="logo" href="/" aria-label="Kuanta home">
+      <img src="/logo/Kuanta.svg" alt="Kuanta" />
+    </a>
+
+    <!-- Center: Desktop nav -->
+    <nav class="nav nav--desktop" aria-label="Primary">
+      <ul class="nav__list">
+        {LINKS.map((l) => (<li><a class="nav__link" href={l.href}>{l.label}</a></li>))}
+      </ul>
+    </nav>
+
+    <!-- Right: actions -->
+    <div class="actions">
+      <a class="download action" href="/download">
+        <span>Download</span>
+        <!-- your provided SVG -->
+        <svg class="dl-ic" width="13" height="12" viewBox="0 0 13 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g clip-path="url(#clip0_572_5523)">
+            <path d="M10.5371 6.28484H11.1071V11.4261H11.6771V6.28484H12.2509V5.71484H10.5371V6.28484Z" fill="#646471"/>
+            <path d="M11.6755 0.570312H11.1055V2.28406H11.6755V0.570312Z" fill="#646471"/>
+            <path d="M11.6755 3.42773H11.1055V5.14148H11.6755V3.42773Z" fill="#646471"/>
+            <path d="M11.107 11.4258H1.39453V11.9995H11.107V11.4258Z" fill="#646471"/>
+            <path d="M11.1063 0H9.39258V0.57H11.1063V0Z" fill="#646471"/>
+            <path d="M9.96211 5.71484H8.81836V6.28484H9.96211V5.71484Z" fill="#646471"/>
+            <path d="M8.2493 7.42898V3.42773H4.24805V3.99773H4.8218V4.57148H5.3918V5.14148H4.8218V5.71523H4.24805V7.42898H4.8218V8.56898H5.3918V9.14273H7.6793V8.56898H6.53555V7.99898H5.96555V6.85523H6.53555V6.28523H7.10555V6.85523H7.6793V7.42898H8.2493Z" fill="#646471"/>
+            <path d="M8.24891 0H6.53516V0.57H8.24891V0Z" fill="#646471"/>
+            <path d="M5.96555 0H4.24805V0.57H5.96555V0Z" fill="#646471"/>
+            <path d="M3.67695 5.71484H2.5332V6.28484H3.67695V5.71484Z" fill="#646471"/>
+            <path d="M3.10828 0H1.39453V0.57H3.10828V0Z" fill="#646471"/>
+            <path d="M1.39406 0.570312H0.820312V2.28406H1.39406V0.570312Z" fill="#646471"/>
+            <path d="M1.39406 3.42773H0.820312V5.14148H1.39406V3.42773Z" fill="#646471"/>
+            <path d="M1.96375 6.28484V5.71484H0.25V6.28484H0.82V11.4261H1.39375V6.28484H1.96375Z" fill="#646471"/>
+          </g>
+          <defs><clipPath id="clip0_572_5523"><rect width="12" height="12" fill="white" transform="translate(0.25)"/></clipPath></defs>
+        </svg>
+      </a>
+
+      <!-- Language (button + popover rendered in HTML) -->
+      <div class="lang-wrap">
+        <button class="lang action" aria-haspopup="menu" aria-expanded="false">
+          <span class="lang__flag">{LANGS.find(l=>l.code===CURRENT_LANG)?.flag}</span>
+          <span class="lang__label">{LANGS.find(l=>l.code===CURRENT_LANG)?.label}</span>
+          <svg class="chev" width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <div class="lang__menu" role="menu" hidden>
+          {LANGS.map((lang) => (
+            <button class="lang__item" role="menuitemradio" data-lang={lang.code}>
+              <span class="lang__flag">{lang.flag}</span>
+              <span class="lang__label">{lang.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Hamburger (tablet & mobile) -->
+      <button class="menu" aria-label="Open menu" aria-controls={drawerId} aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Backdrop + Drawer -->
+  <button class="backdrop" hidden aria-hidden="true" tabindex="-1"></button>
+
+  <aside class="drawer" id={drawerId} role="dialog" aria-modal="true" hidden>
+    <div class="drawer__header">
+      <span class="drawer__title">Menu</span>
+      <button class="drawer__close" aria-label="Close menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="drawer__nav" aria-label="Mobile">
+      <ul>
+        {LINKS.map((l) => (<li><a href={l.href}>{l.label}</a></li>))}
+      </ul>
+    </nav>
+
+    <div class="drawer__section">
+      <a class="download action" href="/download">
+        <span>Download</span>
+        <!-- same SVG as above -->
+        <svg class="dl-ic" width="13" height="12" viewBox="0 0 13 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g clip-path="url(#clip0_572_5523)"><path d="M10.5371 6.28484H11.1071V11.4261H11.6771V6.28484H12.2509V5.71484H10.5371V6.28484Z" fill="#646471"/><path d="M11.6755 0.570312H11.1055V2.28406H11.6755V0.570312Z" fill="#646471"/><path d="M11.6755 3.42773H11.1055V5.14148H11.6755V3.42773Z" fill="#646471"/><path d="M11.107 11.4258H1.39453V11.9995H11.107V11.4258Z" fill="#646471"/><path d="M11.1063 0H9.39258V0.57H11.1063V0Z" fill="#646471"/><path d="M9.96211 5.71484H8.81836V6.28484H9.96211V5.71484Z" fill="#646471"/><path d="M8.2493 7.42898V3.42773H4.24805V3.99773H4.8218V4.57148H5.3918V5.14148H4.8218V5.71523H4.24805V7.42898H4.8218V8.56898H5.3918V9.14273H7.6793V8.56898H6.53555V7.99898H5.96555V6.85523H6.53555V6.28523H7.10555V6.85523H7.6793V7.42898H8.2493Z" fill="#646471"/><path d="M8.24891 0H6.53516V0.57H8.24891V0Z" fill="#646471"/><path d="M5.96555 0H4.24805V0.57H5.96555V0Z" fill="#646471"/><path d="M3.67695 5.71484H2.5332V6.28484H3.67695V5.71484Z" fill="#646471"/><path d="M3.10828 0H1.39453V0.57H3.10828V0Z" fill="#646471"/><path d="M1.39406 0.570312H0.820312V2.28406H1.39406V0.570312Z" fill="#646471"/><path d="M1.39406 3.42773H0.820312V5.14148H1.39406V3.42773Z" fill="#646471"/><path d="M1.96375 6.28484V5.71484H0.25V6.28484H0.82V11.4261H1.39375V6.28484H1.96375Z" fill="#646471"/></g><defs><clipPath id="clip0_572_5523"><rect width="12" height="12" fill="white" transform="translate(0.25)"/></clipPath></defs></svg>
+      </a>
+    </div>
+
+    <div class="drawer__section">
+      <div class="drawer__label">Language</div>
+      <div class="drawer__langs">
+        {LANGS.map((lang) => (
+          <button class="chip" data-lang={lang.code} aria-current={lang.code===CURRENT_LANG?'true':'false'}>
+            <span class="chip__flag">{lang.flag}</span>
+            <span class="chip__label">{lang.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </aside>
+
+  <!-- Inline JS (no server interpolation needed) -->
+  <script type="module">
+    const setup = (root) => {
+      const menuBtn  = root.querySelector('.menu');
+      const drawer   = root.querySelector('.drawer');
+      const closeBtn = root.querySelector('.drawer__close');
+      const backdrop = root.querySelector('.backdrop');
+
+      const langWrap = root.querySelector('.lang-wrap');
+      const langBtn  = langWrap?.querySelector('.lang');
+      const langMenu = langWrap?.querySelector('.lang__menu');
+
+      // Drawer
+      const openDrawer = () => {
+        if (!drawer) return;
+        drawer.hidden = false; backdrop.hidden = false;
+        drawer.setAttribute('data-open','true');
+        menuBtn?.setAttribute('aria-expanded','true');
+        document.documentElement.style.overflow = 'hidden';
+        closeBtn?.focus();
+      };
+      const closeDrawer = () => {
+        if (!drawer) return;
+        drawer.removeAttribute('data-open');
+        menuBtn?.setAttribute('aria-expanded','false');
+        document.documentElement.style.overflow = '';
+        const after = () => { drawer.hidden = true; backdrop.hidden = true; drawer.removeEventListener('transitionend', after); };
+        drawer.addEventListener('transitionend', after, { once:true });
+      };
+      menuBtn?.addEventListener('click', openDrawer);
+      closeBtn?.addEventListener('click', closeDrawer);
+      backdrop?.addEventListener('click', closeDrawer);
+
+      // Language popover (desktop/tablet)
+      const openLang = () => {
+        if (!langMenu || !langBtn) return;
+        langMenu.hidden = false;
+        langBtn.setAttribute('aria-expanded','true');
+        // click-away
+        const onDocClick = (e) => {
+          if (!langMenu.contains(e.target) && !langBtn.contains(e.target)) {
+            closeLang(); document.removeEventListener('click', onDocClick);
+          }
+        };
+        setTimeout(() => document.addEventListener('click', onDocClick), 0);
+      };
+      const closeLang = () => {
+        if (!langMenu || !langBtn) return;
+        langMenu.hidden = true;
+        langBtn.setAttribute('aria-expanded','false');
+      };
+      langBtn?.addEventListener('click', () => {
+        const open = langBtn.getAttribute('aria-expanded') === 'true';
+        open ? closeLang() : openLang();
+      });
+
+      // ESC
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        if (drawer && !drawer.hidden) closeDrawer();
+        if (langMenu && !langMenu.hidden) closeLang();
+      });
+
+      // Language selection (popover + drawer chips)
+      const onLang = (code) => {
+        root.dispatchEvent(new CustomEvent('langchange', { detail: { code } }));
+        // Add your routing here if you want to navigate
+      };
+      root.querySelectorAll('[data-lang]').forEach((el) => {
+        el.addEventListener('click', () => onLang(el.dataset.lang));
+      });
+    };
+
+    document.querySelectorAll('[data-component="header"]').forEach(setup);
+  </script>
+</header>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&family=Russo+One&display=swap');
+
+  :root{
+    --bg:#FDFDFF; --text:#222734; --muted:#646471; --accent:#4F46E5;
+    --max-w:1200px; --header-h:72px;
+  }
+
+  .header{ position:sticky; top:0; z-index:50; background:var(--bg); padding-bottom: 60px; }
+  .container{
+    max-width:var(--max-w); margin:0 auto; padding:10px 20px;
+    display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:16px;
+  }
+
+  .logo img{ height:28px; display:block; }
+
+  .nav--desktop{ display:none; justify-self:center; }
+  .nav__list{ display:flex; gap:clamp(24px,6vw,88px); list-style:none; margin:0; padding:0; }
+  .nav__link{
+    text-decoration:none; color:var(--text);
+    font-family:"Russo One",system-ui,sans-serif; font-weight:400; font-size:15px; line-height:1.2; letter-spacing:-0.02em;
+  }
+  .nav__link:hover{ color:var(--accent); }
+
+  .actions{ display:flex; align-items:center; justify-content: end; gap:clamp(14px,2.8vw,32px); position:relative; }
+  .action{ display:inline-flex; align-items:center; gap:8px; }
+
+  .download{
+    text-decoration:none; color:var(--text);
+    font-family:"Inter",system-ui,sans-serif; font-weight:600; font-size:15px; line-height:1.2; letter-spacing:-0.02em;
+  }
+  .dl-ic{ transform:translateY(1px); }
+
+  .lang-wrap{ position:relative; }
+  .lang{
+    border:0; background:transparent; cursor:pointer; color:var(--text);
+    display:inline-flex; align-items:center; gap:8px; padding:4px 2px;
+    font:600 15px/1.2 "Inter",system-ui,sans-serif; letter-spacing:-0.02em;
+  }
+  .chev{ opacity:.6; }
+
+  .lang__menu{
+    position:absolute; right:0; top:calc(100% + 10px);
+    background:#fff; border:1px solid #eee; border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.08);
+    padding:6px; min-width:140px; z-index:60;
+  }
+  .lang__item{
+    width:100%; text-align:left; background:none; border:0; padding:10px 10px; border-radius:8px; cursor:pointer;
+    font:600 14px/1.2 "Inter",system-ui,sans-serif; color:var(--text);
+  }
+  .lang__item:hover{ background:#f4f6fb; }
+
+  .menu{ border:0; background:transparent; cursor:pointer; padding:6px; margin-left:4px; }
+
+  .backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.32); border:0; margin:0; padding:0; z-index:60; }
+  .drawer{
+    position:fixed; inset:0 0 0 auto; width:min(86vw,380px); background:#fff;
+    box-shadow:-8px 0 24px rgba(0,0,0,.08); transform:translateX(100%); transition:transform 220ms ease; z-index:70;
+    display:flex; flex-direction:column;
+  }
+  .drawer[data-open="true"]{ transform:translateX(0); }
+  .drawer__header{ display:flex; align-items:center; justify-content:space-between; padding:18px; border-bottom:1px solid #eee; }
+  .drawer__nav ul{ list-style:none; margin:0; padding:14px; display:grid; gap:8px; }
+  .drawer__nav a{
+    display:block; padding:12px 10px; border-radius:10px; text-decoration:none; color:var(--text);
+    font-family:"Russo One",system-ui,sans-serif; font-size:15px; line-height:1.2; letter-spacing:-0.02em;
+  }
+  .drawer__section{ padding:14px; border-top:1px solid #eee; }
+  .drawer__label{ font:600 13px/1.2 "Inter",system-ui,sans-serif; color:#7b7f8c; margin-bottom:8px; }
+  .drawer__langs{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:999px; background:#fff; border:1px solid #eee; cursor:pointer;
+    font:600 14px/1.2 "Inter",system-ui,sans-serif; color:var(--text);
+  }
+
+  /* Visibility like your mockups */
+  /* Mobile (default): only logo + hamburger */
+  .download, .lang-wrap { display:none; }
+  .menu { display:inline-flex; }
+
+  /* Tablet: show Download + ENG + hamburger; hide center nav */
+  @media (min-width:768px){
+    .download, .lang-wrap { display:inline-flex; }
+    .nav--desktop { display:none; }
+  }
+
+  /* Desktop: show centered nav + actions; hide hamburger */
+  @media (min-width:1024px){
+    .nav--desktop { display:block; }
+    .menu { display:none; }
+  }
+</style>

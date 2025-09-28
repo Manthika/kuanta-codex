@@ -1,0 +1,80 @@
+---
+/* No props for now; uses the fixed copy & image you provided */
+---
+<section class="home-hero" aria-labelledby="home-hero-title">
+  <div class="hero__inner">
+    <h1 id="home-hero-title" class="hero__title">
+      PROGRAMMABLE<br />MESSAGE<br />ROUTER
+    </h1>
+
+    <p class="hero__desc">
+      Kuanta PMR helps you solve integration problems by immediately applying best
+      practices through the latest message patterns derived from microservice architecture.
+      The new low-latency architecture and programmable messaging environment can actively
+      respond to any integration and deployment strategy required.
+    </p>
+  </div>
+</section>
+
+<style>
+  /* ===== HERO (full-bleed, center on mobile/tablet; left on desktop) ===== */
+  .home-hero{
+    position: relative;
+    inline-size: 100vw;
+    margin-inline: calc(50% - 50vw);
+    min-height: calc(100vh - 150px);
+    background: url("/images/home/home-hero.jpg") center / cover no-repeat;
+    display: grid;
+    align-items: center;
+    isolation: isolate;
+    overflow-x: clip;
+  }
+  @supports not (overflow-x: clip){ .home-hero{ overflow-x: hidden; } }
+
+  .hero__inner{
+    width: min(1200px, 100%);
+    margin-inline: auto;
+    padding: 0 10px;
+    display: grid;
+    justify-items: center;   /* mobile/tablet centered */
+    text-align: center;
+    row-gap: clamp(12px, 2vw, 18px);
+  }
+
+  .hero__title{
+    margin: 0;
+    color: #FDFDFF;
+    text-shadow: 3px 4px 4px rgba(78, 78, 78, 0.69);
+    font-family: Inter, system-ui, sans-serif;
+    font-size: clamp(42px, 9vw, 96px);
+    font-style: italic;
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    white-space: normal; overflow-wrap: anywhere; word-break: break-word; hyphens: auto; text-wrap: balance;
+  }
+
+  .hero__desc{
+    margin: 0;
+    color: rgba(253, 253, 255, 0.63);
+    font-family: "VITRO CORE TTF", Inter, system-ui, sans-serif;
+    font-size: clamp(16px, 2.4vw, 24px);
+    font-weight: 900;
+    line-height: 120%;
+    letter-spacing: -0.01em;
+    max-inline-size: 62ch;
+    white-space: normal; overflow-wrap: anywhere; word-break: break-word; hyphens: auto; text-wrap: balance;
+  }
+
+  @media (min-width: 1024px){
+    .hero__inner{
+      justify-items: start;
+      text-align: left;
+      padding: 0 50px;
+    }
+    .hero__title{ max-inline-size: 12ch; }
+  }
+
+  :global(body){ overflow-x: hidden; } /* safety for full-bleed */
+</style>

@@ -1,0 +1,143 @@
+---
+const ADDRESS_LINE =
+  '17, Gukjegeumyung-ro 2-gil, Yeongdeungpo-gu, Seoul, Republic of Korea';
+const BIZ_NUM = '678-87-02665';
+---
+
+<footer class="footer" data-component="footer">
+  <div class="container">
+    <!-- Brand (right on desktop/tablet, centered on mobile) -->
+    <div class="brand">
+      <span>Billycrew</span>
+      <span class="sep" aria-hidden="true">|</span>
+      <span>Kuanta Solution</span>
+      <img src="/logo/Kuanta.svg" alt="Kuanta" class="logo" />
+    </div>
+
+    <!-- Address (pairs with brand) -->
+    <address class="addr" aria-label="Address">
+      <div class="addr__line">{ADDRESS_LINE}</div>
+      <div class="addr__biz">Business Registration Number : {BIZ_NUM}</div>
+    </address>
+
+    <!-- TOP ▲ with vertical separators -->
+    <button class="to-top" aria-label="Back to top">
+      <span>TOP</span> <span class="arrow">▲</span>
+    </button>
+
+    <!-- Copyright -->
+    <small class="copy">© billycrew 2023. All Rights Reserved.</small>
+  </div>
+
+  <script type="module">
+    const root = document.querySelector('[data-component="footer"]');
+    root?.querySelector('.to-top')?.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</footer>
+
+<style>
+  /* Inter only */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --bg: #F9FAFB;
+    --text: #111318;
+    --muted:#7B7F8C;
+    --line: rgba(0,0,0,.55);
+    --max-w: 1200px;
+    --pad-x: 24px;
+    --gap-y: 16px;
+  }
+
+  .footer{
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  }
+
+  /* MOBILE DEFAULT (center everything, order: brand → addr → top → copy) */
+  .container{
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 28px var(--pad-x) 40px;
+    display: grid;
+    gap: var(--gap-y);
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "brand"
+      "addr"
+      "top"
+      "copy";
+    text-align: center;
+  }
+
+  .brand   { grid-area: brand; display: inline-flex; align-items: center; gap: 14px; justify-self: center; font-weight: 500; letter-spacing: -0.01em; }
+  .sep     { opacity: .7; }
+  .logo    { height: 20px; width: auto; display: inline-block; transform: translateY(1px); }
+
+  .addr    { grid-area: addr; font-style: normal; line-height: 1.6; letter-spacing: -0.01em; }
+  .addr__line { font-size: 16px; }
+  .addr__biz  { margin-top: 6px; font-size: 16px; font-weight: 600; }
+
+  .to-top  {
+    grid-area: top;
+    position: relative;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px;
+    background: transparent; border: 0; cursor: pointer;
+    font-weight: 600; letter-spacing: -0.01em;
+    justify-self: center;
+  }
+  .to-top::before,
+  .to-top::after{
+    content: "";
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 1px; height: 18px; background: var(--line);
+  }
+  .to-top::before{ left: -16px; }
+  .to-top::after{ right: -16px; }
+  .to-top:focus-visible{ outline: 2px solid #1a73e8; outline-offset: 2px; }
+  .arrow{ font-size: .9em; }
+
+  .copy    { grid-area: copy; color: var(--muted); font-size: 14px; letter-spacing: -0.01em; }
+
+  /* TABLET (≥768px & <1024px)
+     TOP on right, everything else on left */
+  @media (min-width: 768px){
+    .container{
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "brand top"
+        "addr  top"
+        "copy  copy";
+      text-align: left;
+    }
+    .brand  { justify-self: start; }
+    .addr   { justify-self: start; max-width: 720px; }
+    .to-top { justify-self: end; }
+    .copy   { justify-self: start; }
+  }
+
+  /* DESKTOP (≥1024px)
+     LEFT = TOP + COPYRIGHT, RIGHT = BRAND + ADDRESS */
+  @media (min-width: 1024px){
+	.container{
+		grid-template-columns: 1fr 1fr;
+		grid-template-areas:
+		"brand top"
+		"addr  copy";
+		align-items: start;
+		text-align: left;
+	}
+
+	/* Left column */
+	.brand { justify-self: start; }
+	.addr  { justify-self: start; max-width: 780px; }
+
+	/* Right column */
+	.to-top { justify-self: end; }
+	.copy   { justify-self: end; text-align: right; }
+  }
+</style>
