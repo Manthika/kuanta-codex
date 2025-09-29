@@ -1,0 +1,433 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+import FormattedDate from '../../../components/FormattedDate.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`Blog • ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+
+    <!-- Scoped styles (default Astro scoping) -->
+    <style>
+      :root{
+        --ink:#0f1523;
+        --muted:#6b7280;
+        --chip:#EEF0F5;
+        --chipText:#39393D;
+        --line:#E9ECF2;
+        --cta:#4A3BFF;
+        --bg:#FFFFFF;
+        --max:1200px;
+        --xpad:20px;
+      }
+      @media (min-width:768px){ :root{ --xpad:32px; } }
+      @media (min-width:1024px){ :root{ --xpad:50px; } }
+
+      /* Global safety: prevent horizontal scroll */
+      *,
+      *::before,
+      *::after{ box-sizing:border-box; }
+      html, body{ overflow-x:hidden; }
+
+      body{ background:linear-gradient(180deg,#F7F8FC, #FDFDFF 30%); color:var(--ink); }
+      main{ width:min(var(--max),100%); margin:0 auto; padding:24px var(--xpad) 80px; }
+
+      /* ===== Breadcrumb + search ===== */
+      .bar{
+        display:grid;
+        grid-template-columns: 1fr;   /* stack on mobile */
+        align-items:center;
+        gap:12px;
+        margin-bottom:24px;
+      }
+      @media (min-width:768px){
+        .bar{
+          grid-template-columns: 1fr auto; /* two cols on tablet+ */
+          gap:16px;
+        }
+      }
+
+      /* Breadcrumbs: hidden on mobile; static variant never shown */
+      .crumbs{ display:none; gap:8px; align-items:center; font:600 12px/1.4 Inter, system-ui, sans-serif; color:var(--muted); }
+      .crumbs a{ color:var(--muted); text-decoration:none; }
+      .crumbs a:hover{ color:var(--ink); }
+      .crumbs__static{ display:none; }          /* never show */
+      .crumbs__links{ display:none; }
+      @media (min-width:768px){
+        .crumbs{ display:flex; }
+        .crumbs__links{ display:flex; color:#373C56; font-family:Inter; font-size:16px; font-weight:500; line-height:110%; letter-spacing:-0.16px; }
+      }
+
+      .search{ position:relative; }
+      .search input{
+        width:100%;
+        max-width:340px;                  /* cap on larger screens */
+        height:40px;
+        border:1px solid var(--line);
+        border-radius:10px;
+        padding:0 12px 0 34px;
+        background:#fff; color:var(--ink);
+        font:600 14px/1 Inter, system-ui, sans-serif;
+      }
+      .search input::placeholder,
+      .search input::-webkit-input-placeholder,
+      .search input::-moz-placeholder,
+      .search input:-ms-input-placeholder{
+        color:#646471; font-family:Inter, system-ui, sans-serif; font-size:14px; font-style:normal;
+        font-weight:400; line-height:20px;
+      }
+      .search svg{ position:absolute; left:10px; top:50%; transform:translateY(-50%); opacity:.6; }
+
+      /* ===== Posts ===== */
+      .list{
+        display:grid;
+        gap:24px;                             /* smaller gap mobile */
+        border:1px solid rgba(0,0,0,0.10);
+        padding-inline:12px;                  /* provides inner gutter */
+      }
+      @media (min-width:768px){
+        .list{
+          gap:40px;
+          padding-inline:24px;
+        }
+      }
+
+      .post{
+        background:var(--bg);
+        border-radius:0;
+        padding:32px 0;
+        margin:0;                             /* was 0 32px (caused overflow) */
+        position:relative;
+        overflow:hidden;
+        border-bottom:1px solid rgba(0, 0, 0, 0.10);
+        transition: box-shadow .15s ease, border-color .15s ease, transform .05s ease;
+      }
+      .post__head{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+
+      /* Title — per spec */
+      .post__title{
+        margin:0 0 10px 0;
+        font-family:"Vitro Core", Inter, system-ui, sans-serif;
+        font-weight:900; font-style:normal;
+        font-size: clamp(22px, 3vw, 32px);
+        line-height:110%;
+        letter-spacing:-0.32px;
+      }
+      .title-link{ color:#000; text-decoration:none; }
+      .title-link:hover{ text-decoration:underline; text-underline-offset:2px; }
+
+      /* Date — per spec */
+      .post__meta{
+        margin:0 0 10px 0;
+        color:#565660;
+        font:600 clamp(14px, 2vw, 18px)/110% Inter, system-ui, sans-serif;
+        letter-spacing:-0.18px;
+      }
+
+      /* Description — per spec (single-line on larger; wrap on tiny screens) */
+      .post__desc{
+        margin:0 0 12px 0;
+        color:#646471;
+        font:400 clamp(14px, 2.2vw, 18px)/160% Inter, system-ui, sans-serif;
+        overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+      }
+      @media (max-width:479.98px){
+        .post__desc{
+          white-space:normal;
+          display:-webkit-box;
+          -webkit-line-clamp:2;
+          -webkit-box-orient:vertical;
+        }
+      }
+
+      /* Hashtags — optional */
+      .chips{ display:flex; flex-wrap:wrap; gap:8px; margin:2px 0 0; }
+      .chip{
+        padding:4px 10px; border-radius:8px;
+        background:var(--chip); color:var(--chipText);
+        font:500 14px/20px Inter, system-ui, sans-serif;
+        text-align:center;
+      }
+
+      /* READ CTA — per spec */
+      .post__cta{
+        display:none;
+        position:absolute; right:0px; top:70%; transform:translateY(-50%);
+        background:var(--cta); color:#fff; text-decoration:none;
+        border-radius:2px;
+        padding:10px 18px 10px 20px;
+        align-items:center; gap:12px;
+      }
+      .post__cta-text{
+        font: italic 900 40px/160% Inter, system-ui, sans-serif;
+        letter-spacing:-0.02em;
+      }
+      .post__cta-arrow svg{ display:block; }
+      @media (hover:hover) and (pointer:fine){
+        .post:hover .post__cta{ display:flex; }
+      }
+
+      .divider{ margin:0 clamp(16px, 6vw, 80px); } /* safe margins */
+    </style>
+
+    <!-- Only pagination styles are global -->
+    <style is:global>
+      /* ===== Pagination ===== */
+      #pagi{
+        display:flex;
+        justify-content:center;        /* desktop/tablet center */
+        align-items:center;
+        gap:18px;
+        margin-top:32px;
+      }
+      #pagi a{
+        text-decoration:none !important;
+        user-select:none;
+        transition:transform .05s ease, box-shadow .15s ease, background .15s ease, color .15s ease;
+      }
+      /* Purple circular chevrons */
+      #pagi .pagi__btn{
+        width:40px; height:40px;
+        display:inline-flex; justify-content:center; align-items:center;
+        border-radius:999px; border:none;
+        background:#4A3BFF; color:#fff;
+        font:800 14px/1 Inter, system-ui, sans-serif;
+        box-shadow:0 8px 18px rgba(74,59,255,.25);
+      }
+      #pagi .pagi__btn:hover{ filter:brightness(1.06); }
+      #pagi .pagi__btn:active{ transform:translateY(1px); }
+
+      /* Disabled chevrons: light gray */
+      #pagi .is-disabled{
+        background:#E9ECF2 !important;
+        color:#ffffff !important;
+        box-shadow:none !important;
+        pointer-events:none;
+        opacity:1 !important;
+      }
+
+      /* Numbers inline (no pills) */
+      #pagi .pagi__num{
+        min-width:0; padding:0 2px;
+        border:none; background:transparent;
+        color:#0f1523;
+        font:700 14px/1 Inter, system-ui, sans-serif;
+      }
+
+      /* Current page: small light-gray circle */
+      #pagi .pagi__num[aria-current="page"]{
+        width:28px; height:28px;
+        display:inline-flex; justify-content:center; align-items:center;
+        background:#E9ECF2;
+        color:#0f1523;
+        border-radius:999px;
+      }
+
+      /* Tablet */
+      @media (min-width:768px) and (max-width:1023.98px){
+        #pagi{ gap:14px; }
+        #pagi .pagi__btn{ width:36px; height:36px; font-size:13px; }
+        #pagi .pagi__num{ font-size:13px; }
+        #pagi .pagi__num[aria-current="page"]{ width:26px; height:26px; }
+      }
+
+      /* Mobile: only prev/next pushed to edges */
+      @media (max-width:767.98px){
+        #pagi{
+          justify-content:space-between;
+          gap:0;
+          width:100%;
+          max-width:min(640px, 92vw);
+          margin-left:auto; margin-right:auto;
+        }
+        #pagi .pagi__num{ display:none; }      /* hide numbers */
+        #pagi .pagi__btn{
+          width:44px; height:44px;
+          font-size:18px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <Header />
+
+    <main>
+      <!-- Top bar: breadcrumb + search -->
+      <div class="bar">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <div class="crumbs__static">Home &gt; Blog</div>
+          <div class="crumbs__links">
+            <a href="/">Home</a>
+            <span>&nbsp;&gt;&nbsp;</span>
+            <span aria-current="page">Blog</span>
+          </div>
+        </nav>
+
+        <div class="search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M10.3686 10.3686C10.8056 9.93148 11.1524 9.41258 11.3889 8.84151C11.6255 8.27043 11.7472 7.65836 11.7472 7.04023C11.7472 6.4221 11.6255 5.81002 11.3889 5.23895C11.1524 4.66787 10.8056 4.14898 10.3686 3.71189C9.93148 3.27481 9.41258 2.9281 8.84151 2.69155C8.27043 2.455 7.65835 2.33325 7.04023 2.33325C6.4221 2.33325 5.81002 2.455 5.23895 2.69155C4.66787 2.9281 4.14898 3.27481 3.71189 3.71189C2.82916 4.59462 2.33325 5.79186 2.33325 7.04023C2.33325 8.28859 2.82916 9.48583 3.71189 10.3686C4.59462 11.2513 5.79186 11.7472 7.04023 11.7472C8.28859 11.7472 9.48583 11.2513 10.3686 10.3686ZM10.3686 10.3686L13.3332 13.3332" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <input id="search" type="search" placeholder="Enter keywords" />
+        </div>
+      </div>
+
+      <!-- Posts list -->
+      <section class="list" id="list">
+        {
+          posts.map((post) => {
+            const href = `/blog/${post.id}/`;
+            const hashtags = (post.data.hashtags ?? []);
+            const searchBlob = [
+              post.data.title,
+              post.data.description,
+              ...(Array.isArray(hashtags) ? hashtags : [])
+            ].filter(Boolean).join(' ').toLowerCase();
+
+            return (
+                <article class="post" data-search={searchBlob}>
+                  <div class="post__head">
+                    <h3 class="post__title">
+                      <a href={href} class="title-link">{post.data.title}</a>
+                    </h3>
+
+                    <!-- Desktop hover CTA -->
+                    <a class="post__cta" href={href} aria-label={`Read ${post.data.title}`}>
+                      <span class="post__cta-text">READ</span>
+                      <span class="post__cta-arrow" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="67" height="45" viewBox="0 0 67 45" fill="none">
+                          <path d="M33.2457 45L28.7312 40.8817L51.8757 25.2623H0.5L1.70809 19.7377H54.6098L37.4422 3.4654L42.7197 0L66.5 22.5L33.2457 45Z" fill="white"/>
+                        </svg>
+                      </span>
+                    </a>
+                  </div>
+
+                  <p class="post__meta">
+                    <FormattedDate date={post.data.pubDate} />
+                  </p>
+
+                  {post.data.description && (
+                    <p class="post__desc">{post.data.description}</p>
+                  )}
+
+                  {Array.isArray(hashtags) && hashtags.length > 0 && (
+                    <div class="chips">
+                      {hashtags.map((t) => (<span class="chip">#{t}</span>))}
+                    </div>
+                  )}
+                </article>
+            );
+          })
+        }
+      </section>
+
+      <!-- Pagination -->
+      <nav class="pagi" id="pagi" aria-label="Pagination"></nav>
+    </main>
+
+    <Footer />
+
+    <!-- JS: search + pagination -->
+    <script type="module">
+      const PAGE_SIZE = 4;
+
+      const listEl = document.getElementById('list');
+      const postEls = Array.from(listEl.querySelectorAll('.post'));
+      const searchInput = document.getElementById('search');
+      const pagi = document.getElementById('pagi');
+
+      const qp = new URLSearchParams(location.search);
+      let q = qp.get('q') ?? '';
+      let page = +(qp.get('page') ?? 1);
+      if (q) searchInput.value = q;
+
+      const isMobile = () => matchMedia('(max-width: 767.98px)').matches;
+
+      function filterPosts() {
+        const term = (searchInput.value || '').trim().toLowerCase();
+        q = term;
+        return postEls.filter(el => el.dataset.search.includes(term));
+      }
+
+      function updateURL() {
+        const next = new URL(location.href);
+        if (q) next.searchParams.set('q', q); else next.searchParams.delete('q');
+        if (page > 1) next.searchParams.set('page', String(page)); else next.searchParams.delete('page');
+        history.replaceState({}, '', next);
+      }
+
+      function renderList() {
+        const filtered = filterPosts();
+        const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+        page = Math.min(Math.max(1, page), totalPages);
+
+        postEls.forEach(el => el.style.display = 'none');
+        const start = (page - 1) * PAGE_SIZE;
+        filtered.slice(start, start + PAGE_SIZE).forEach(el => el.style.display = '');
+
+        renderPagination(totalPages);
+        updateURL();
+      }
+
+      function mkBtn(label, {pageTo, current=false, disabled=false} = {}) {
+        const a = document.createElement('a');
+        a.href = '#';
+        a.textContent = label;
+        a.className = current ? 'pagi__num' : 'pagi__btn';
+        if (current) a.setAttribute('aria-current', 'page');
+        if (disabled) { a.classList.add('is-disabled'); a.setAttribute('aria-disabled','true'); }
+        else if (pageTo) a.dataset.page = String(pageTo);
+        return a;
+      }
+
+      function renderPagination(total) {
+        pagi.innerHTML = '';
+
+        const prev = mkBtn('<', { pageTo: page - 1, disabled: page <= 1 });
+        const next = mkBtn('>', { pageTo: page + 1, disabled: page >= total });
+
+        if (isMobile()) {
+          // Only prev/next on mobile
+          pagi.append(prev, next);
+        } else {
+          const first = mkBtn('<<', { pageTo: 1, disabled: page === 1 });
+          const last  = mkBtn('>>', { pageTo: total, disabled: page === total });
+          pagi.append(first, prev);
+          for (let i = 1; i <= total; i++) {
+            pagi.append(mkBtn(String(i), { pageTo: i, current: i === page }));
+          }
+          pagi.append(next, last);
+        }
+      }
+
+      // Events
+      let t;
+      searchInput.addEventListener('input', () => {
+        clearTimeout(t);
+        t = setTimeout(() => { page = 1; renderList(); }, 150);
+      });
+
+      pagi.addEventListener('click', (e) => {
+        const a = e.target.closest('a');
+        if (!a || a.classList.contains('is-disabled')) return;
+        const p = +a.dataset.page;
+        if (!Number.isFinite(p)) return;
+        e.preventDefault();
+        page = p;
+        renderList();
+      });
+
+      matchMedia('(max-width: 767.98px)').addEventListener?.('change', () => renderList());
+
+      renderList();
+    </script>
+  </body>
+</html>
