@@ -1,0 +1,82 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import BlogPost from '../../../layouts/BlogPost.astro';
+import {
+  LANGUAGES,
+  DEFAULT_LANG,
+  getTranslations,
+  getLanguage,
+  isLang,
+  buildNavLinks,
+  buildDownloadHref,
+  buildLanguageOptions,
+  homePath,
+  blogBasePath,
+  buildPathFromSegments,
+} from '../../../i18n/config';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { lang: post.data.lang, slug: post.data.slug },
+    props: post,
+  }));
+}
+
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props as Props;
+const { Content } = await render(post);
+
+const requestedLang = Astro.params.lang ?? post.data.lang ?? DEFAULT_LANG;
+const langCode = isLang(requestedLang) ? requestedLang : (isLang(post.data.lang) ? post.data.lang : DEFAULT_LANG);
+
+if (!isLang(requestedLang)) {
+  throw Astro.redirect(buildPathFromSegments(langCode, ['blog', post.data.slug]));
+}
+
+const language = getLanguage(langCode);
+const translations = getTranslations(langCode);
+const navLinks = buildNavLinks(langCode, translations.header.navLinks);
+const downloadHref = buildDownloadHref(langCode, translations.header.downloadPath);
+const languages = buildLanguageOptions(Astro.url.pathname, langCode);
+const homeHref = homePath(langCode);
+const blogHref = blogBasePath(langCode);
+
+const headTitle = `${post.data.title} • ${translations.blog.headTitle}`;
+const headDescription = post.data.description ?? translations.blog.headDescription;
+
+const headerProps = {
+  navLinks,
+  downloadLabel: translations.header.downloadLabel,
+  downloadHref,
+  languages,
+  currentLang: langCode,
+  menuLabel: translations.header.menuLabel,
+  languageLabel: translations.header.languageLabel,
+  homeAriaLabel: translations.header.homeAriaLabel,
+  homeHref,
+};
+
+const footerProps = translations.footer;
+
+const breadcrumbs = {
+  homeLabel: translations.blogPost.breadcrumbs.home,
+  homeHref,
+  blogLabel: translations.blogPost.breadcrumbs.blog,
+  blogHref,
+};
+---
+<BlogPost
+  {...post.data}
+  htmlLang={language.htmlLang}
+  headTitle={headTitle}
+  headDescription={headDescription}
+  header={headerProps}
+  footer={footerProps}
+  breadcrumbs={breadcrumbs}
+  dateFormat={translations.dates}
+  updatedPrefix={translations.blogPost.updatedPrefix}
+>
+  <Content />
+</BlogPost>
