@@ -2,20 +2,25 @@
 /** <Header /> — i18n-ready (EN/KO) */
 import { getRelativeLocaleUrl } from "astro:i18n";
 
+import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from "../i18n";
+
+const locale = (Astro.currentLocale ?? FALLBACK_LOCALE) as SupportedLocale;
+const t = getTranslations(locale);
+
 const LINKS = [
-  { label: 'Get started', href: '/get-started' },
-  { label: 'Docs',        href: '/docs' },
-  { label: 'Product',     href: '/product' },
-  { label: 'Use Cases',   href: '/use-cases' },
-  { label: 'Blog',        href: '/blog' }
+  { label: t.nav.getStarted, href: '/get-started' },
+  { label: t.nav.docs,        href: '/docs' },
+  { label: t.nav.product,     href: '/product' },
+  { label: t.nav.useCases,    href: '/use-cases' },
+  { label: t.nav.blog,        href: '/blog' }
 ] as const;
 
 const LANGS = [
-  { code: 'en', label: 'ENG', flag: '🇺🇸' },
-  { code: 'ko', label: 'KOR', flag: '🇰🇷' }
+  { code: 'en', label: t.nav.language.en, flag: '🇺🇸' },
+  { code: 'ko', label: t.nav.language.ko, flag: '🇰🇷' }
 ] as const;
 
-const CURRENT_LANG = Astro.currentLocale ?? 'en';
+const CURRENT_LANG = locale;
 const here = Astro.url.pathname;
 
 // 1) Remove any existing locale prefix (/en if you ever prefix it, /ko today)
@@ -51,7 +56,7 @@ const drawerId = 'hdr-drawer';
     <!-- Right: actions -->
     <div class="actions">
       <a class="download action" href={L('/download')}>
-        <span>Download</span>
+        <span>{t.nav.download}</span>
         <!-- your provided SVG -->
         <svg class="dl-ic" width="13" height="12" viewBox="0 0 13 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <g clip-path="url(#clip0_572_5523)">
@@ -129,7 +134,7 @@ const drawerId = 'hdr-drawer';
 
     <div class="drawer__section">
       <a class="download action" href={L('/download')}>
-        <span>Download</span>
+        <span>{t.nav.download}</span>
         <!-- same SVG as above -->
         <svg class="dl-ic" width="13" height="12" viewBox="0 0 13 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g clip-path="url(#clip0_572_5523)"><path d="M10.5371 6.28484H11.1071V11.4261H11.6771V6.28484H12.2509V5.71484H10.5371V6.28484Z" fill="#646471"/><path d="M11.6755 0.570312H11.1055V2.28406H11.6755V0.570312Z" fill="#646471"/><path d="M11.6755 3.42773H11.1055V5.14148H11.6755V3.42773Z" fill="#646471"/><path d="M11.107 11.4258H1.39453V11.9995H11.107V11.4258Z" fill="#646471"/><path d="M11.1063 0H9.39258V0.57H11.1063V0Z" fill="#646471"/><path d="M9.96211 5.71484H8.81836V6.28484H9.96211V5.71484Z" fill="#646471"/><path d="M8.2493 7.42898V3.42773H4.24805V3.99773H4.8218V4.57148H5.3918V5.14148H4.8218V5.71523H4.24805V7.42898H4.8218V8.56898H5.3918V9.14273H7.6793V8.56898H6.53555V7.99898H5.96555V6.85523H6.53555V6.28523H7.10555V6.85523H7.6793V7.42898H8.2493Z" fill="#646471"/><path d="M8.24891 0H6.53516V0.57H8.24891V0Z" fill="#646471"/><path d="M5.96555 0H4.24805V0.57H5.96555V0Z" fill="#646471"/><path d="M3.67695 5.71484H2.5332V6.28484H3.67695V5.71484Z" fill="#646471"/><path d="M3.10828 0H1.39453V0.57H3.10828V0Z" fill="#646471"/><path d="M1.39406 0.570312H0.820312V2.28406H1.39406V0.570312Z" fill="#646471"/><path d="M1.39406 3.42773H0.820312V5.14148H1.39406V3.42773Z" fill="#646471"/><path d="M1.96375 6.28484V5.71484H0.25V6.28484H0.82V11.4261H1.39375V6.28484H1.96375Z" fill="#646471"/></g><defs><clipPath id="clip0_572_5523"><rect width="12" height="12" fill="white" transform="translate(0.25)"/></clipPath></defs></svg>
       </a>

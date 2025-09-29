@@ -1,17 +1,15 @@
 ---
 /* 3-card section; uses your images and typography */
+import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from "../../i18n";
+
+const locale = (Astro.currentLocale ?? FALLBACK_LOCALE) as SupportedLocale;
+const features = getTranslations(locale).home.features;
 ---
 <section class="cards-section" aria-labelledby="cards-title">
   <div class="container">
-    <h2 id="cards-title" class="cards-title">
-      Features
-    </h2>
-    <h2 class="cards-subtitle">
-      Technology that Leads the Way for Challenging Environments
-    </h2>
-    <h5 class="main-desc">
-      Learn about the core features of Kuanta technology, which offers stability and superior technology even in a rapidly changing market environment, a consistent messaging architecture, and flexible application across diverse environments without constraints. You can immediately apply it to your service environment.
-    </h5>
+    <h2 id="cards-title" class="cards-title">{features.title}</h2>
+    <h2 class="cards-subtitle">{features.tagline}</h2>
+    <h5 class="main-desc">{features.description}</h5>
   </div>
 
   <div class="container">
@@ -28,10 +26,8 @@
             </defs>
           </svg>
         </div>
-        <h3 class="feature-title">Engineer-friendly</h3>
-        <p class="feature-desc">
-          Intuitive CLI and TUI for engineers Fast and accurate operations
-        </p>
+        <h3 class="feature-title">{features.items.engineerFriendly.title}</h3>
+        <p class="feature-desc">{features.items.engineerFriendly.description}</p>
       </article>
 
       <article class="feature-card" role="listitem">
@@ -46,10 +42,8 @@
             </defs>
           </svg>
         </div>
-        <h3 class="feature-title">Integrierte with existing systems</h3>
-        <p class="feature-desc">
-          Flexible integration with various legacy and external systems
-        </p>
+        <h3 class="feature-title">{features.items.integrateExisting.title}</h3>
+        <p class="feature-desc">{features.items.integrateExisting.description}</p>
       </article>
 
       <article class="feature-card" role="listitem">
@@ -64,10 +58,8 @@
             </defs>
           </svg>
         </div>
-        <h3 class="feature-title">Message analysis and statistics</h3>
-        <p class="feature-desc">
-          Analyze collected and refined, reliable real-time data
-        </p>
+        <h3 class="feature-title">{features.items.messageAnalysis.title}</h3>
+        <p class="feature-desc">{features.items.messageAnalysis.description}</p>
       </article>
 
       <article class="feature-card" role="listitem">
@@ -82,10 +74,8 @@
             </defs>
           </svg>
         </div>
-        <h3 class="feature-title">Hierarchical distribution & low-latency messaging</h3>
-        <p class="feature-desc">
-          Fast and reliable delivery through system-wide technology
-        </p>
+        <h3 class="feature-title">{features.items.hierarchicalDistribution.title}</h3>
+        <p class="feature-desc">{features.items.hierarchicalDistribution.description}</p>
       </article>
     </div>
   </div>

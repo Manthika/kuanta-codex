@@ -1,32 +1,36 @@
 ---
-const ADDRESS_LINE =
-  '17, Gukjegeumyung-ro 2-gil, Yeongdeungpo-gu, Seoul, Republic of Korea';
-const BIZ_NUM = '678-87-02665';
+import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from "../i18n";
+
+const locale = (Astro.currentLocale ?? FALLBACK_LOCALE) as SupportedLocale;
+const translations = getTranslations(locale);
+const footer = translations.home.footer ?? translations.useCases.footer;
+const topLabel = footer.top.replace('▲', '').trim();
+const showArrow = footer.top.includes('▲');
 ---
 
 <footer class="footer" data-component="footer">
   <div class="container">
     <!-- Brand (right on desktop/tablet, centered on mobile) -->
-    <div class="brand">
-      <span>Billycrew</span>
-      <span class="sep" aria-hidden="true">|</span>
-      <span>Kuanta Solution</span>
-      <img src="/logo/Kuanta.svg" alt="Kuanta" class="logo" />
-    </div>
+      <div class="brand">
+        <span>{footer.companyName}</span>
+        <span class="sep" aria-hidden="true">|</span>
+        <span>{footer.productName}</span>
+        <img src="/logo/Kuanta.svg" alt="Kuanta" class="logo" />
+      </div>
 
-    <!-- Address (pairs with brand) -->
-    <address class="addr" aria-label="Address">
-      <div class="addr__line">{ADDRESS_LINE}</div>
-      <div class="addr__biz">Business Registration Number : {BIZ_NUM}</div>
-    </address>
+      <!-- Address (pairs with brand) -->
+      <address class="addr" aria-label="Address">
+        <div class="addr__line">{footer.address}</div>
+        <div class="addr__biz">{footer.businessRegistrationNumber}</div>
+      </address>
 
-    <!-- TOP ▲ with vertical separators -->
-    <button class="to-top" aria-label="Back to top">
-      <span>TOP</span> <span class="arrow">▲</span>
-    </button>
+      <!-- TOP ▲ with vertical separators -->
+      <button class="to-top" aria-label="Back to top">
+        <span>{topLabel}</span> {showArrow && <span class="arrow">▲</span>}
+      </button>
 
-    <!-- Copyright -->
-    <small class="copy">© billycrew 2023. All Rights Reserved.</small>
+      <!-- Copyright -->
+      <small class="copy">{footer.rights}</small>
   </div>
 
   <script type="module">
