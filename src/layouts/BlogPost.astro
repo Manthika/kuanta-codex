@@ -5,160 +5,110 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
-import type { DateFormatConfig, FooterContent, HeaderLanguageOption } from '../i18n/config';
 
-type BlogData = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'];
 
-interface HeaderProps {
-  navLinks: { label: string; href: string }[];
-  downloadLabel: string;
-  downloadHref: string;
-  languages: HeaderLanguageOption[];
-  currentLang: string;
-  menuLabel: string;
-  languageLabel: string;
-  homeAriaLabel: string;
-  homeHref: string;
-}
-
-interface Breadcrumbs {
-  homeLabel: string;
-  homeHref: string;
-  blogLabel: string;
-  blogHref: string;
-}
-
-interface Props extends BlogData {
-  htmlLang: string;
-  headTitle: string;
-  headDescription: string;
-  header: HeaderProps;
-  footer: FooterContent;
-  breadcrumbs: Breadcrumbs;
-  dateFormat: DateFormatConfig;
-  updatedPrefix: string;
-}
-
-const {
-  title,
-  description,
-  pubDate,
-  updatedDate,
-  heroImage,
-  header,
-  footer,
-  breadcrumbs,
-  htmlLang,
-  headTitle,
-  headDescription,
-  dateFormat,
-  updatedPrefix,
-} = Astro.props as Props;
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
-<html lang={htmlLang}>
-  <head>
-    <BaseHead title={headTitle} description={headDescription} image={heroImage as Image | undefined} />
-    <style>
-      main {
-        width: 100%;
-        max-width: 100%;
-        margin: 0;
-      }
-      .hero-image {
-        width: 100%;
-      }
-      .hero-image img {
-        display: block;
-        margin: 0 auto;
-        border-radius: 12px;
-        box-shadow: var(--box-shadow);
-      }
-      .prose {
-        padding: 1em;
-      }
 
-      @media (min-width:768px){
-        .prose {
-          padding: 3em;
-        }
-      }
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<style>
+			main {
+				width: 100%;
+				max-width: 100%;
+				margin: 0;
+			}
+			.hero-image {
+				width: 100%;
+			}
+			.hero-image img {
+				display: block;
+				margin: 0 auto;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+			}
+			.prose {
+				padding: 1em;
+			}
 
-      .title {
-        margin-bottom: 1em;
-        padding: 1em 0;
-        text-align: left;
-        line-height: 1;
-      }
-      .title h1 {
-        color: #000001;
-        font-family: "VITRO CORE";
-        font-size: 32px;
-        font-style: normal;
-        font-weight: 900;
-        line-height: 110%; /* 35.2px */
-        letter-spacing: -0.32px;
-        margin-bottom: 32px;
-      }
-      .date {
-        color: #565660;
-        font-family: Inter;
-        font-size: 18px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: 110%; /* 19.8px */
-        letter-spacing: -0.18px;
-        margin-bottom: 32px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-      .last-updated-on {
-        font-style: italic;
-      }
+			@media (min-width:768px){
+				.prose {
+					padding: 3em;
+				}
+			}
 
-      .crumbs{ display:none; gap:8px; align-items:center; font:600 12px/1.4 Inter, system-ui, sans-serif; color:var(--muted); margin-bottom: 32px; }
-      .crumbs a{ color:var(--muted); text-decoration:none; }
-      .crumbs a:hover{ color:var(--ink); }
-      .crumbs__links{ display:none; }
-      @media (min-width:768px){
-        .crumbs{ display:flex; }
-        .crumbs__links{ display:flex; color:#373C56; font-family:Inter; font-size:16px; font-weight:500; line-height:110%; letter-spacing:-0.16px; }
-      }
-    </style>
-  </head>
+			.title {
+				margin-bottom: 1em;
+				padding: 1em 0;
+				text-align: left;
+				line-height: 1;
+			}
+			.title h1 {
+				color: #000001;
+				font-family: "VITRO CORE";
+				font-size: 32px;
+				font-style: normal;
+				font-weight: 900;
+				line-height: 110%; /* 35.2px */
+				letter-spacing: -0.32px;
+				margin-bottom: 32px;
+			}
+			.date {
+				color: #565660;
+				font-family: Inter;
+				font-size: 18px;
+				font-style: normal;
+				font-weight: 600;
+				line-height: 110%; /* 19.8px */
+				letter-spacing: -0.18px;
+				margin-bottom: 32px;
+			}
+			.last-updated-on {
+				font-style: italic;
+			}
 
-  <body>
-    <Header {...header} />
-    <main>
-      <article>
-        <div class="prose">
-          <div class="title">
-            <nav class="crumbs" aria-label="Breadcrumb">
-              <div class="crumbs__links">
-                <a href={breadcrumbs.homeHref}>{breadcrumbs.homeLabel}</a>
-                <span>&nbsp;&gt;&nbsp;</span>
-                <a href={breadcrumbs.blogHref}>{breadcrumbs.blogLabel}</a>
-                <span>&nbsp;&gt;&nbsp;</span>
-                <span aria-current="page">{title}</span>
-              </div>
-            </nav>
 
-            <h1>{title}</h1>
-            <div class="date">
-              <FormattedDate date={pubDate} locale={dateFormat.locale} options={dateFormat.options} />
-              {updatedDate && (
-                <span class="last-updated-on">
-                  · {updatedPrefix}
-                  <FormattedDate date={updatedDate} locale={dateFormat.locale} options={dateFormat.options} />
-                </span>
-              )}
-            </div>
-            <hr />
-          </div>
-          <slot />
-        </div>
-      </article>
-    </main>
-    <Footer {...footer} />
-  </body>
+			.crumbs{ display:none; gap:8px; align-items:center; font:600 12px/1.4 Inter, system-ui, sans-serif; color:var(--muted); margin-bottom: 32px; }
+			.crumbs a{ color:var(--muted); text-decoration:none; }
+			.crumbs a:hover{ color:var(--ink); }
+			.crumbs__static{ display:none; }          /* never show */
+			.crumbs__links{ display:none; }
+			@media (min-width:768px){
+				.crumbs{ display:flex; }
+				.crumbs__links{ display:flex; color:#373C56; font-family:Inter; font-size:16px; font-weight:500; line-height:110%; letter-spacing:-0.16px; }
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<article>
+				<div class="prose">
+					<div class="title">
+
+						<nav class="crumbs" aria-label="Breadcrumb">
+						<div class="crumbs__links">
+							<a href="/">Home</a>
+							<span>&nbsp;&gt;&nbsp;</span>
+							<a href="/blog">Blog</a>
+							<span>&nbsp;&gt;&nbsp;</span>
+							<span aria-current="page">{title}</span>
+						</div>
+						</nav>
+
+						<h1>{title}</h1>
+						<div class="date">
+							<FormattedDate date={pubDate} />
+						</div>
+						<hr />
+					</div>
+					<slot />
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
 </html>

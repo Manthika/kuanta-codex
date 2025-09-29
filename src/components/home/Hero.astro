@@ -1,22 +1,17 @@
-interface Props {
-  titleLines: string[];
-  description: string;
-}
-
-const { titleLines = [], description } = Astro.props as Props;
+---
+/* No props for now; uses the fixed copy & image you provided */
+---
 <section class="home-hero" aria-labelledby="home-hero-title">
   <div class="hero__inner">
     <h1 id="home-hero-title" class="hero__title">
-      {titleLines.map((line, index) => (
-        <Fragment>
-          {line}
-          {index < titleLines.length - 1 && <br />}
-        </Fragment>
-      ))}
+      PROGRAMMABLE <br /> MESSAGE <br /> ROUTER
     </h1>
 
     <p class="hero__desc">
-      {description}
+      Kuanta PMR helps you solve integration problems by immediately applying best
+      practices through the latest message patterns derived from microservice architecture.
+      The new low-latency architecture and programmable messaging environment can actively
+      respond to any integration and deployment strategy required.
     </p>
   </div>
 </section>

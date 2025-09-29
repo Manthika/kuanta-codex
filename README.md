@@ -1,73 +1,67 @@
-# Kuanta Multilingual Marketing Site
+# Astro Starter Kit: Blog
 
-This project is a customised Astro build of the Kuanta marketing site. It renders fully translated English and Korean content, supports locale-aware routing, and serves blog posts from language-specific feeds.
+```sh
+npm create astro@latest -- --template blog
+```
 
-## ✨ Highlights
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-- 🌐 **Two fully translated locales** (`/en/`, `/ko/`) with automatic redirects from `/` to `/en/`.
-- 🧭 Locale-aware navigation, headers, and footers sourced from the central i18n configuration.
-- 📰 Blog index and post routes scoped by language, with dedicated RSS output for English content.
-- 🧱 Reusable home and use-case components fed by translation data for each language.
-- 🧩 Content collections with schema validation for translated markdown/MDX blog posts.
+Features:
 
-## 📁 Project Structure
+- ✅ Minimal styling (make it your own!)
+- ✅ 100/100 Lighthouse performance
+- ✅ SEO-friendly with canonical URLs and OpenGraph data
+- ✅ Sitemap support
+- ✅ RSS Feed support
+- ✅ Markdown & MDX support
+
+## 🚀 Project Structure
+
+Inside of your Astro project, you'll see the following folders and files:
 
 ```text
 ├── public/
 ├── src/
-│   ├── components/        # Shared + locale-aware UI components
-│   ├── content/
-│   │   └── blog/          # Blog posts with `lang` and `slug` frontmatter
-│   ├── i18n/              # Translation config & helpers
-│   ├── layouts/
-│   └── pages/
-│       ├── index.astro    # Redirects to default locale
-│       └── [lang]/        # Locale-scoped routes (home, use-cases, blog, posts)
+│   ├── components/
+│   ├── content/
+│   ├── layouts/
+│   └── pages/
 ├── astro.config.mjs
+├── README.md
 ├── package.json
 └── tsconfig.json
 ```
 
-Blog posts live in `src/content/blog`. English articles may sit at the root of this directory, while Korean posts are grouped in `src/content/blog/ko`. Each file must declare:
+Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
-```yaml
----
-title: '...'
-description: '...'
-pubDate: 'Jan 01 2024'
-lang: en        # or `ko`
-slug: 'post-slug'
----
-```
+There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
 
-The `lang` flag and `slug` field are used at build time to generate locale-specific routes.
+The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
 
-## 🌐 Adding a New Locale
-
-1. Extend the `LangCode` union and `LANGUAGES` map in `src/i18n/config.ts` with the new language code, labels, and metadata.
-2. Provide translations for `header`, `footer`, `home`, `useCases`, `blog`, and `blogPost` inside the `translations` object in the same file.
-3. Create content under `src/pages/<new-lang>/` as needed (copy the `[lang]` templates if you want custom pages).
-4. Author blog posts with `lang: <new-lang>` so they appear on the correct index and in language switcher paths.
+Any static assets, like images, can be placed in the `public/` directory.
 
 ## 🧞 Commands
 
-All commands run from the project root:
+All commands are run from the root of the project, from a terminal:
 
-| Command | Description |
-| --- | --- |
-| `npm install` | Install dependencies. *(Fails in locked-down environments; ensure you have access to the configured registry.)* |
-| `npm run dev` | Start the local dev server at `http://localhost:4321`. |
-| `npm run build` | Build the production site into `./dist`. |
-| `npm run preview` | Preview the production build locally. |
-| `npm run astro …` | Run Astro CLI commands such as `astro check`. |
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-## 🚧 Troubleshooting
+## 👀 Want to learn more?
 
-- **403 Forbidden during `npm install`** – The environment may be configured with a restricted npm registry (see the warning about `http-proxy`). Update your `.npmrc` or registry credentials before installing.
-- **Locale routing issues** – Verify that every page component calls `getStaticPaths()` with `LANGUAGES` and that post frontmatter includes the `lang` and `slug` fields.
+Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
 
-## 📚 Further Reading
+## Credit
 
-- [Astro Content Collections](https://docs.astro.build/en/guides/content-collections/)
-- [Astro Internationalisation Guide](https://docs.astro.build/en/guides/internationalization/)
+This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
 
+## Custom fonts
+
+The UI references the [Vitro Core](https://www.freefontdownload.org/en/vitro-core.font) typeface. Add the `vitro-core.otf` file to
+`public/fonts/` so that the bundled styles can load it at runtime.

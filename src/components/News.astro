@@ -1,50 +1,40 @@
 ---
 import { getCollection } from 'astro:content';
-import FallbackImage from '../assets/blog-placeholder-1.jpg';
-import type { LangCode } from '../i18n/config';
-
-interface Props {
-  lang: LangCode;
-  title: string;
-  readMoreLabel: string;
-  blogBasePath: string;
-}
-
-const { lang, title, readMoreLabel, blogBasePath } = Astro.props as Props;
 
 const posts = (await getCollection('blog'))
-  .filter((post) => post.data.draft !== true && post.data.lang === lang)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+	.filter(post => post.data.draft === false).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+).slice(0, 3);
 
-const basePath = blogBasePath.endsWith('/') ? blogBasePath : `${blogBasePath}/`;
-const fallbackImageSrc = FallbackImage.src;
+console.log(JSON.stringify(posts[0].data));
 
-const buildHref = (slug: string) => {
-  const cleanSlug = slug.replace(/^\/+|\/+$/g, '');
-  return `${basePath}${cleanSlug}/`;
-};
+const SITE_URL = import.meta.env.SITE_URL || 'http://localhost:4321';
+
 ---
 <section class="cards-section" aria-labelledby="news-title">
-  <h2 id="news-title" class="news-title">{title}</h2>
+  <!-- <div class="container"> -->
+    <h2 id="news-title" class="news-title">
+      NEWS / BLOG
+    </h2>
+  <!-- </div> -->
 
-  <ul>
-    {posts.map((post) => {
-      const imageSrc = post.data.heroImage ? post.data.heroImage.src : fallbackImageSrc;
-      return (
-        <li>
-          <a href={buildHref(post.data.slug || post.slug)}>
-            <img width={720} height={360} src={imageSrc} alt="" />
-            <div class="text-container">
-              <h4 class="title">{post.data.title}</h4>
+  
+	<ul>
+		{
+			posts.map((post) => (
+				<li>
+					<a href={`${SITE_URL}/blog/${post.id}/`}>
+						<img width={720} height={360} src={`${post.data.heroImage?.src}`} alt="" />
+						<div class="text-container">
+							<h4 class="title">{post.data.title}</h4>
               <p class="description">{post.data.description}</p>
-              <p class="read-more">{readMoreLabel}</p>
-            </div>
-          </a>
-        </li>
-      );
-    })}
-  </ul>
+              <p class="read-more">Read more →</p>
+						</div>
+					</a>
+				</li>
+			))
+		}
+	</ul>
 </section>
 
 <style>
@@ -54,8 +44,8 @@ const buildHref = (slug: string) => {
     align-items: flex-start;
     gap: 32px;
     align-self: stretch;
-    background: linear-gradient(73deg, rgba(81, 111, 233, 0.40) 9.74%, rgba(152, 223, 165, 0.13) 98.3%);
-  }
+    background: linear-gradient(73deg, rgba(81, 111, 233, 0.40) 9.74%, rgba(152, 223, 165, 0.13) 98.3%); 
+  } 
 
   .container{
     width: min(1200px, 100%);
@@ -78,70 +68,80 @@ const buildHref = (slug: string) => {
     margin-left: 25px;
     margin-bottom: 50px;
   }
+  
 
-  ul {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    justify-content: center;
-  }
 
-  ul li {
-    width: calc(33.3% - 2rem);
-    box-sizing: border-box;
+	ul {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2rem;
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		justify-content: center;
+	}
+
+	ul li {
+		width: calc(33.3% - 2rem);
+		box-sizing: border-box;
     border-radius: 4px;
     border: 1px solid rgba(0, 0, 0, 0.10);
     background: #FDFDFF;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.02), 0 6px 12px 0 rgba(0, 0, 0, 0.03);
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    display: flex;
-    flex-direction: column;
-  }
+		flex: none;
+		order: 0;
+		flex-grow: 0;
+		display: flex;
+		flex-direction: column;
+	}
 
-  ul li:last-child {
-    gap: 0;
-  }
+	ul li:last-child {
+		gap: 0; 
+	}
 
-  ul li * {
-    text-decoration: none;
-    transition: 0.2s ease;
-  }
+	ul li * {
+		text-decoration: none;
+		transition: 0.2s ease;
+	}
 
-  ul li img {
-    width: 100%;
-    height: 302px;
-    object-fit: cover;
-    border-bottom-right-radius: 0px;
-    border-bottom-left-radius: 0px;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
-    flex: none;
-    order: 0;
-    align-self: stretch;
-  }
+	ul li img {
+		width: 100%;
+		height: 302px;
+		object-fit: cover;
+		border-bottom-right-radius: 0px;
+		border-bottom-left-radius: 0px;
+		border-top-right-radius: 4px;
+		border-top-left-radius: 4px;
+		flex: none;
+		order: 0;
+		align-self: stretch;
+	}
 
-  ul li a {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
+	ul li a {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
 
-  .text-container {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    margin-top: 10px;
-    padding: 24px;
-  }
+	.text-container {
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		margin-top: 10px;
+		padding: 24px;
+	}
 
-  .read-more {
+	.date {
+		margin: 0;
+		color: rgb(var(--gray));
+		font-size: 14px;
+		line-height: 1.5;
+	}
+
+
+	.read-more {
     color: #000C4A;
     font-family: Inter;
     font-size: 18px;
@@ -151,44 +151,48 @@ const buildHref = (slug: string) => {
     letter-spacing: -0.09px;
     margin-top: 32px;
     margin-bottom: 0;
-  }
+	}
 
-  .description {
+
+	.description {
     color: #646471;
-    font-family: "VITRO CORE";
+    font-family: "VITRO CORE",;
     font-size: 14px;
     font-style: normal;
     font-weight: 900;
     line-height: 150%; /* 21px */
     letter-spacing: -0.14px;
     margin: 0;
-  }
+	}
 
-  .title {
+	.title {
     color: #000C4A;
-    font-family: "VITRO CORE";
+    font-family: "VITRO CORE"
     font-size: 24px;
     font-style: normal;
     font-weight: 900;
     line-height: 145%; /* 34.8px */
     letter-spacing: -0.48px;
     margin: 0;
-  }
+	}
 
-  ul a:hover img {
-    box-shadow: var(--box-shadow);
-  }
+	
 
-  @media (max-width: 720px) {
-    .recommended {
-      width: calc(100vw - 60px);
-    }
-    ul {
-      gap: 0.5em;
-    }
-    ul li {
-      width: 100%;
-      text-align: center;
-    }
-  }
+	ul a:hover img {
+		box-shadow: var(--box-shadow);
+	}
+
+	@media (max-width: 720px) {
+		.recommended {
+			width: calc(100vw - 60px);
+		}
+		ul {
+			gap: 0.5em;
+		}
+		ul li {
+			width: 100%;
+			text-align: center;
+		}
+	}
+
 </style>

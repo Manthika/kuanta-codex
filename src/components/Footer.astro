@@ -1,48 +1,32 @@
-interface Props {
-  brandCompany: string;
-  brandProduct: string;
-  addressLine: string;
-  businessLabel: string;
-  businessNumber: string;
-  topLabel: string;
-  topAriaLabel: string;
-  copyright: string;
-}
-
-const {
-  brandCompany,
-  brandProduct,
-  addressLine,
-  businessLabel,
-  businessNumber,
-  topLabel,
-  topAriaLabel,
-  copyright,
-} = Astro.props as Props;
+---
+const ADDRESS_LINE =
+  '17, Gukjegeumyung-ro 2-gil, Yeongdeungpo-gu, Seoul, Republic of Korea';
+const BIZ_NUM = '678-87-02665';
+---
 
 <footer class="footer" data-component="footer">
   <div class="container">
     <!-- Brand (right on desktop/tablet, centered on mobile) -->
     <div class="brand">
-      <span>{brandCompany}</span>
+      <span>Billycrew</span>
       <span class="sep" aria-hidden="true">|</span>
-      <span>{brandProduct}</span>
+      <span>Kuanta Solution</span>
       <img src="/logo/Kuanta.svg" alt="Kuanta" class="logo" />
     </div>
 
     <!-- Address (pairs with brand) -->
     <address class="addr" aria-label="Address">
-      <div class="addr__line">{addressLine}</div>
-      <div class="addr__biz">{businessLabel} : {businessNumber}</div>
+      <div class="addr__line">{ADDRESS_LINE}</div>
+      <div class="addr__biz">Business Registration Number : {BIZ_NUM}</div>
     </address>
 
     <!-- TOP ▲ with vertical separators -->
-    <button class="to-top" aria-label={topAriaLabel}>
-      <span>{topLabel}</span> <span class="arrow">▲</span>
+    <button class="to-top" aria-label="Back to top">
+      <span>TOP</span> <span class="arrow">▲</span>
     </button>
 
     <!-- Copyright -->
-    <small class="copy">{copyright}</small>
+    <small class="copy">© billycrew 2023. All Rights Reserved.</small>
   </div>
 
   <script type="module">

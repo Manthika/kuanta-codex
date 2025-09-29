@@ -1,4 +1,29 @@
 ---
-import { DEFAULT_LANG, buildPathFromSegments } from '../i18n/config';
-throw Astro.redirect(buildPathFromSegments(DEFAULT_LANG, []));
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+import Hero from '../components/home/Hero.astro';
+import Cards from '../components/home/Cards.astro';
+import Features from '../components/home/Features.astro';
+import News from '../components/News.astro';
 ---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+
+  <body>
+    <Header />
+    <main>
+      <Hero />
+      <Cards />
+      <Features />
+      <News />
+    </main>
+    <Footer />
+  </body>
+</html>

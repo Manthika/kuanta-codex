@@ -1,18 +1,11 @@
 ---
-interface Props {
-  date: Date;
-  locale: string;
-  options?: Intl.DateTimeFormatOptions;
-}
+interface Props { date: Date; }
+const { date } = Astro.props;
 
-const {
-  date,
-  locale,
-  options,
-} = Astro.props as Props;
-
-const formatter = new Intl.DateTimeFormat(locale, options ?? { year: 'numeric', month: 'short', day: 'numeric' });
-const display = formatter.format(date);
+const month = date.toLocaleString('en-US', { month: 'short' }); // e.g., "Jul"
+const day   = date.getDate();                                   // 23
+const year  = date.getFullYear();                                // 2025
+const display = `${month}/${day}/${year}`;
 ---
 
 <time datetime={date.toISOString()}>
