@@ -1,0 +1,75 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import Hero from '../../components/home/Hero.astro';
+import Cards from '../../components/home/Cards.astro';
+import Features from '../../components/home/Features.astro';
+import News from '../../components/News.astro';
+import {
+  LANGUAGES,
+  DEFAULT_LANG,
+  getLanguage,
+  getTranslations,
+  isLang,
+  buildNavLinks,
+  buildDownloadHref,
+  buildLanguageOptions,
+  homePath,
+  blogBasePath,
+  buildPathFromSegments,
+} from '../../i18n/config';
+
+export function getStaticPaths() {
+  return Object.values(LANGUAGES).map((lang) => ({ params: { lang: lang.code } }));
+}
+
+const requestedLang = Astro.params.lang ?? DEFAULT_LANG;
+const langCode = isLang(requestedLang) ? requestedLang : DEFAULT_LANG;
+
+if (!isLang(requestedLang)) {
+  throw Astro.redirect(buildPathFromSegments(DEFAULT_LANG, []));
+}
+
+const language = getLanguage(langCode);
+const translations = getTranslations(langCode);
+const navLinks = buildNavLinks(langCode, translations.header.navLinks);
+const downloadHref = buildDownloadHref(langCode, translations.header.downloadPath);
+const languages = buildLanguageOptions(Astro.url.pathname, langCode);
+const homeHref = homePath(langCode);
+const blogPath = blogBasePath(langCode);
+
+const headTitle = `${translations.home.headTitle} • ${translations.site.title}`;
+const headDescription = translations.home.headDescription;
+---
+<!doctype html>
+<html lang={language.htmlLang}>
+  <head>
+    <BaseHead title={headTitle} description={headDescription} />
+  </head>
+  <body>
+    <Header
+      navLinks={navLinks}
+      downloadLabel={translations.header.downloadLabel}
+      downloadHref={downloadHref}
+      languages={languages}
+      currentLang={langCode}
+      menuLabel={translations.header.menuLabel}
+      languageLabel={translations.header.languageLabel}
+      homeAriaLabel={translations.header.homeAriaLabel}
+      homeHref={homeHref}
+    />
+    <main>
+      <Hero titleLines={translations.home.hero.titleLines} description={translations.home.hero.description} />
+      <Cards titleLines={translations.home.cards.titleLines} items={translations.home.cards.items} />
+      <Features
+        title={translations.home.features.title}
+        subtitle={translations.home.features.subtitle}
+        description={translations.home.features.description}
+        items={translations.home.features.items}
+      />
+      <News lang={langCode} title={translations.home.news.title} readMoreLabel={translations.home.news.readMore} blogBasePath={blogPath} />
+    </main>
+    <Footer {...translations.footer} />
+  </body>
+</html>

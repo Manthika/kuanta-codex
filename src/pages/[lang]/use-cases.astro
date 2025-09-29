@@ -1,73 +1,86 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import {
+  LANGUAGES,
+  DEFAULT_LANG,
+  getLanguage,
+  getTranslations,
+  isLang,
+  buildNavLinks,
+  buildDownloadHref,
+  buildLanguageOptions,
+  homePath,
+  buildPathFromSegments,
+} from '../../i18n/config';
 
-const intro = {
-  heading: "POWERED BY",
-  heroImg: "/images/use-cases/use-cases-hero.jpg",
-};
+export function getStaticPaths() {
+  return Object.values(LANGUAGES).map((lang) => ({ params: { lang: lang.code } }));
+}
 
-const cases = [
-  {
-    id: "daishin",
-    titleLines: ["Daishin Securities", "Kuanta Solutions"],
-    desc:
-      "Discover Kuanta’s Features, built with reliable and advanced architecture for volatile markets, offering a consistent single messaging framework and flexible data pipelines.",
-    image: "/images/use-cases/daishin.jpg",
-    href: "#",
-    reverseOnDesktop: false,
-  },
-  {
-    id: "woori",
-    titleLines: ["WOORI INVESTMENT", "SECURITIES Kuanta", "Solutions"],
-    desc:
-      "Discover Kuanta’s Features, built with reliable and advanced architecture for volatile markets, offering a consistent single messaging framework and flexible data pipelines.",
-    image: "/images/use-cases/woori.jpg",
-    href: "#",
-    reverseOnDesktop: true,
-  },
-];
+const requestedLang = Astro.params.lang ?? DEFAULT_LANG;
+const langCode = isLang(requestedLang) ? requestedLang : DEFAULT_LANG;
+
+if (!isLang(requestedLang)) {
+  throw Astro.redirect(buildPathFromSegments(DEFAULT_LANG, ['use-cases']));
+}
+
+const language = getLanguage(langCode);
+const translations = getTranslations(langCode);
+const navLinks = buildNavLinks(langCode, translations.header.navLinks);
+const downloadHref = buildDownloadHref(langCode, translations.header.downloadPath);
+const languages = buildLanguageOptions(Astro.url.pathname, langCode);
+const homeHref = homePath(langCode);
+const headTitle = `${translations.useCases.headTitle} • ${translations.site.title}`;
+const headDescription = translations.useCases.headDescription;
 ---
-
 <!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
+<html lang={language.htmlLang}>
+  <head>
+    <BaseHead title={headTitle} description={headDescription} />
+  </head>
 
   <body>
-    <Header />
+    <Header
+      navLinks={navLinks}
+      downloadLabel={translations.header.downloadLabel}
+      downloadHref={downloadHref}
+      languages={languages}
+      currentLang={langCode}
+      menuLabel={translations.header.menuLabel}
+      languageLabel={translations.header.languageLabel}
+      homeAriaLabel={translations.header.homeAriaLabel}
+      homeHref={homeHref}
+    />
 
     <!-- HERO -->
-    <section class="hero" role="img" aria-label="Powered by">
-      <div class="container"><h1 class="hero__title">{intro.heading}</h1></div>
+    <section class="hero" role="img" aria-label={translations.useCases.heroHeading}>
+      <div class="container"><h1 class="hero__title">{translations.useCases.heroHeading}</h1></div>
     </section>
 
     <!-- CASES -->
     <main class="cases">
-      {cases.map((c) => (
-        <section class={"case" + (c.reverseOnDesktop ? " case--reverse" : "")} id={c.id}>
+      {translations.useCases.cases.map((item) => (
+        <section class={`case${item.reverseOnDesktop ? ' case--reverse' : ''}`} id={item.id}>
           <figure class="case__media">
-            <img src={c.image} alt={`${c.titleLines[0]} showcase`} />
+            <img src={item.image} alt={item.imageAlt} />
           </figure>
 
           <div class="case__content">
             <h2 class="case__title">
-              {c.titleLines.map((line) => (<span class="case__line">{line}</span>))}
+              {item.titleLines.map((line) => (<span class="case__line">{line}</span>))}
             </h2>
-            <p class="case__desc">{c.desc}</p>
-            <a href={c.href} class="btn">Learn</a>
+            <p class="case__desc">{item.description}</p>
+            <a href={item.href} class="btn">{item.cta}</a>
           </div>
         </section>
       ))}
     </main>
 
-    <Footer />
+    <Footer {...translations.footer} />
   </body>
 </html>
-
 
 <style>
   /* Body + tokens */
@@ -98,18 +111,18 @@ const cases = [
   }
   .hero__title{
     margin: 0;
-	color: #FFF;
-	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-	font-family: Inter;
-	font-size: clamp(52px, 10vw, 77px);
-	font-style: italic;
-	font-weight: 900;
-	line-height: 110%; /* 84.7px */
-	letter-spacing: -0.77px;
+        color: #FFF;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+        font-family: Inter;
+        font-size: clamp(52px, 10vw, 77px);
+        font-style: italic;
+        font-weight: 900;
+        line-height: 110%; /* 84.7px */
+        letter-spacing: -0.77px;
 
-	white-space: normal;           /* undo any inherited nowrap */
-	overflow-wrap: anywhere;       /* last-resort breaking if needed */
-	text-wrap: balance;   
+        white-space: normal;           /* undo any inherited nowrap */
+        overflow-wrap: anywhere;       /* last-resort breaking if needed */
+        text-wrap: balance;
   }
 
   /* ================= MUI-like CONTAINER =================
@@ -118,7 +131,7 @@ const cases = [
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-	margin-top: 30px;
+        margin-top: 30px;
     padding-left: 16px;
     padding-right: 16px;
     padding-top: var(--vpad);
@@ -199,17 +212,16 @@ const cases = [
   @media (min-width: 1200px){
     .case{
       grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: 0;   /* gap is created by the empty columns 6–7 */
+      column-gap: 0;
       row-gap: 32px;
       align-items: start;
     }
 
-    /* default order: media left (1–5), content right (8–12) */
     .case__media   { grid-column: 1 / span 5; }
     .case__content { grid-column: 8 / span 5; }
 
-    /* reversed order: content left, media right */
     .case--reverse .case__content { grid-column: 1 / span 5; }
     .case--reverse .case__media   { grid-column: 8 / span 5; }
   }
+}
 </style>

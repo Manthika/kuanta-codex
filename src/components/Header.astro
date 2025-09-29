@@ -1,40 +1,58 @@
----
-/** Usage: <Header /> — single file, no deps */
-const LINKS = [
-  { label: 'Get started', href: '/get-started' },
-  { label: 'Docs',        href: '/docs' },
-  { label: 'Product',     href: '/product' },
-  { label: 'Use Cases',   href: '/use-cases' },
-  { label: 'Blog',        href: '/blog' }
-] as const;
+import type { HeaderLanguageOption } from '../i18n/config';
 
-const LANGS = [
-  { code: 'en', label: 'ENG', flag: '🇺🇸' },
-  { code: 'ko', label: 'KOR', flag: '🇰🇷' }
-] as const;
+interface NavLink {
+  label: string;
+  href: string;
+}
 
-const CURRENT_LANG = 'en';
+interface Props {
+  navLinks: NavLink[];
+  downloadLabel: string;
+  downloadHref: string;
+  languages: HeaderLanguageOption[];
+  currentLang: string;
+  menuLabel: string;
+  languageLabel: string;
+  homeAriaLabel: string;
+  homeHref: string;
+}
+
+const {
+  navLinks = [],
+  downloadLabel,
+  downloadHref,
+  languages = [],
+  currentLang,
+  menuLabel,
+  languageLabel,
+  homeAriaLabel,
+  homeHref,
+} = Astro.props as Props;
+
 const drawerId = 'hdr-drawer';
+const currentLanguage = currentLang ?? languages[0]?.code ?? 'en';
+const currentLanguageInfo = languages.find((item) => item.code === currentLanguage);
+const languagesSerialized = JSON.stringify(languages);
 ---
 
-<header class="header" data-component="header">
+<header class="header" data-component="header" data-langs={languagesSerialized} data-current-lang={currentLanguage}>
   <div class="container">
     <!-- Left: Logo -->
-    <a class="logo" href="/" aria-label="Kuanta home">
+    <a class="logo" href={homeHref} aria-label={homeAriaLabel}>
       <img src="/logo/Kuanta.svg" alt="Kuanta" />
     </a>
 
     <!-- Center: Desktop nav -->
     <nav class="nav nav--desktop" aria-label="Primary">
       <ul class="nav__list">
-        {LINKS.map((l) => (<li><a class="nav__link" href={l.href}>{l.label}</a></li>))}
+        {navLinks.map((l) => (<li><a class="nav__link" href={l.href}>{l.label}</a></li>))}
       </ul>
     </nav>
 
     <!-- Right: actions -->
     <div class="actions">
-      <a class="download action" href="/download">
-        <span>Download</span>
+      <a class="download action" href={downloadHref}>
+        <span>{downloadLabel}</span>
         <!-- your provided SVG -->
         <svg class="dl-ic" width="13" height="12" viewBox="0 0 13 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <g clip-path="url(#clip0_572_5523)">
@@ -59,16 +77,16 @@ const drawerId = 'hdr-drawer';
 
       <!-- Language (button + popover rendered in HTML) -->
       <div class="lang-wrap">
-        <button class="lang action" aria-haspopup="menu" aria-expanded="false">
-          <span class="lang__flag">{LANGS.find(l=>l.code===CURRENT_LANG)?.flag}</span>
-          <span class="lang__label">{LANGS.find(l=>l.code===CURRENT_LANG)?.label}</span>
+        <button class="lang action" aria-haspopup="menu" aria-expanded="false" aria-label={languageLabel}>
+          <span class="lang__flag">{currentLanguageInfo?.flag}</span>
+          <span class="lang__label">{currentLanguageInfo?.label}</span>
           <svg class="chev" width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
         </button>
         <div class="lang__menu" role="menu" hidden>
-          {LANGS.map((lang) => (
-            <button class="lang__item" role="menuitemradio" data-lang={lang.code}>
+          {languages.map((lang) => (
+            <button class="lang__item" role="menuitemradio" data-lang={lang.code} data-href={lang.href} aria-checked={lang.code===currentLanguage?'true':'false'}>
               <span class="lang__flag">{lang.flag}</span>
               <span class="lang__label">{lang.label}</span>
             </button>
@@ -90,7 +108,7 @@ const drawerId = 'hdr-drawer';
 
   <aside class="drawer" id={drawerId} role="dialog" aria-modal="true" hidden>
     <div class="drawer__header">
-      <span class="drawer__title">Menu</span>
+      <span class="drawer__title">{menuLabel}</span>
       <button class="drawer__close" aria-label="Close menu">
         <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -100,23 +118,23 @@ const drawerId = 'hdr-drawer';
 
     <nav class="drawer__nav" aria-label="Mobile">
       <ul>
-        {LINKS.map((l) => (<li><a href={l.href}>{l.label}</a></li>))}
+        {navLinks.map((l) => (<li><a href={l.href}>{l.label}</a></li>))}
       </ul>
     </nav>
 
     <div class="drawer__section">
-      <a class="download action" href="/download">
-        <span>Download</span>
+      <a class="download action" href={downloadHref}>
+        <span>{downloadLabel}</span>
         <!-- same SVG as above -->
         <svg class="dl-ic" width="13" height="12" viewBox="0 0 13 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g clip-path="url(#clip0_572_5523)"><path d="M10.5371 6.28484H11.1071V11.4261H11.6771V6.28484H12.2509V5.71484H10.5371V6.28484Z" fill="#646471"/><path d="M11.6755 0.570312H11.1055V2.28406H11.6755V0.570312Z" fill="#646471"/><path d="M11.6755 3.42773H11.1055V5.14148H11.6755V3.42773Z" fill="#646471"/><path d="M11.107 11.4258H1.39453V11.9995H11.107V11.4258Z" fill="#646471"/><path d="M11.1063 0H9.39258V0.57H11.1063V0Z" fill="#646471"/><path d="M9.96211 5.71484H8.81836V6.28484H9.96211V5.71484Z" fill="#646471"/><path d="M8.2493 7.42898V3.42773H4.24805V3.99773H4.8218V4.57148H5.3918V5.14148H4.8218V5.71523H4.24805V7.42898H4.8218V8.56898H5.3918V9.14273H7.6793V8.56898H6.53555V7.99898H5.96555V6.85523H6.53555V6.28523H7.10555V6.85523H7.6793V7.42898H8.2493Z" fill="#646471"/><path d="M8.24891 0H6.53516V0.57H8.24891V0Z" fill="#646471"/><path d="M5.96555 0H4.24805V0.57H5.96555V0Z" fill="#646471"/><path d="M3.67695 5.71484H2.5332V6.28484H3.67695V5.71484Z" fill="#646471"/><path d="M3.10828 0H1.39453V0.57H3.10828V0Z" fill="#646471"/><path d="M1.39406 0.570312H0.820312V2.28406H1.39406V0.570312Z" fill="#646471"/><path d="M1.39406 3.42773H0.820312V5.14148H1.39406V3.42773Z" fill="#646471"/><path d="M1.96375 6.28484V5.71484H0.25V6.28484H0.82V11.4261H1.39375V6.28484H1.96375Z" fill="#646471"/></g><defs><clipPath id="clip0_572_5523"><rect width="12" height="12" fill="white" transform="translate(0.25)"/></clipPath></defs></svg>
       </a>
     </div>
 
     <div class="drawer__section">
-      <div class="drawer__label">Language</div>
+      <div class="drawer__label">{languageLabel}</div>
       <div class="drawer__langs">
-        {LANGS.map((lang) => (
-          <button class="chip" data-lang={lang.code} aria-current={lang.code===CURRENT_LANG?'true':'false'}>
+        {languages.map((lang) => (
+          <button class="chip" data-lang={lang.code} data-href={lang.href} aria-current={lang.code===currentLanguage?'true':'false'}>
             <span class="chip__flag">{lang.flag}</span>
             <span class="chip__label">{lang.label}</span>
           </button>
@@ -189,12 +207,18 @@ const drawerId = 'hdr-drawer';
       });
 
       // Language selection (popover + drawer chips)
-      const onLang = (code) => {
-        root.dispatchEvent(new CustomEvent('langchange', { detail: { code } }));
-        // Add your routing here if you want to navigate
+      const onLang = (el) => {
+        const targetCode = el.dataset.lang;
+        const targetHref = el.dataset.href;
+        root.dispatchEvent(new CustomEvent('langchange', { detail: { code: targetCode } }));
+        if (targetHref) {
+          closeLang();
+          closeDrawer();
+          window.location.href = targetHref;
+        }
       };
       root.querySelectorAll('[data-lang]').forEach((el) => {
-        el.addEventListener('click', () => onLang(el.dataset.lang));
+        el.addEventListener('click', () => onLang(el));
       });
     };
 

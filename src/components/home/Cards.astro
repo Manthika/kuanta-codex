@@ -1,56 +1,45 @@
 ---
-/* 3-card section; uses your images and typography */
+interface CardItem {
+  title: string;
+  description: string;
+  href: string;
+  cta: string;
+  image: string;
+  imageAlt: string;
+}
+
+interface Props {
+  titleLines: string[];
+  items: CardItem[];
+}
+
+const { titleLines = [], items = [] } = Astro.props as Props;
 ---
 <section class="cards-section" aria-labelledby="cards-title">
   <div class="container">
     <h2 id="cards-title" class="cards-title">
-      Low-Latency and High-Performance,<br />
-      Yet Programmable,<br />
-      Making it Flexible.
+      {titleLines.map((line, index) => (
+        <Fragment>
+          {line}
+          {index < titleLines.length - 1 && <br />}
+        </Fragment>
+      ))}
     </h2>
   </div>
 
   <div class="container">
     <div class="cards-viewport">
       <div class="cards-track">
-        <!-- PMR -->
-        <article class="card">
-          <img class="card__img" src="/images/home/pmr.jpg" alt="PMR preview" />
-          <div class="card__body">
-            <h3 class="card__title">PMR</h3>
-            <p class="card__desc">
-              Flexible configuration schemes and programming interfaces allow you to design a single
-              message architecture that responds consistently to all messages.
-            </p>
-            <a class="card__more" href="#">Read more →</a>
-          </div>
-        </article>
-
-        <!-- KAS -->
-        <article class="card">
-          <img class="card__img" src="/images/home/kas.jpg" alt="KAS preview" />
-          <div class="card__body">
-            <h3 class="card__title">KAS</h3>
-            <p class="card__desc">
-              A micro-application service that supports vertical/horizontal unit business expansion
-              without restrictions on cloud and on-premises.
-            </p>
-            <a class="card__more" href="#">Read more →</a>
-          </div>
-        </article>
-
-        <!-- BROKER -->
-        <article class="card">
-          <img class="card__img" src="/images/home/broker.jpg" alt="Broker preview" />
-          <div class="card__body">
-            <h3 class="card__title">BROKER</h3>
-            <p class="card__desc">
-              A Pub/Sub-based message broker supporting diverse topologies, high-speed messaging
-              processing, and reliable recovery and retransmission.
-            </p>
-            <a class="card__more" href="#">Read more →</a>
-          </div>
-        </article>
+        {items.map((card) => (
+          <article class="card">
+            <img class="card__img" src={card.image} alt={card.imageAlt} />
+            <div class="card__body">
+              <h3 class="card__title">{card.title}</h3>
+              <p class="card__desc">{card.description}</p>
+              <a class="card__more" href={card.href}>{card.cta}</a>
+            </div>
+          </article>
+        ))}
       </div>
     </div>
   </div>
@@ -85,7 +74,7 @@
   .cards-title{
     margin: 0 0 clamp(18px,4vw,36px);
     text-align: center;
-    font-family: "VITRO CORE"
+    font-family: "VITRO CORE";
     font-size: clamp(18px,3.4vw,28px);
     font-weight: 900;
     line-height: 175%;
@@ -93,7 +82,7 @@
     background: linear-gradient(90deg, #4A3BFF 0%, #000C4A 100%);
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   }
-  
+
 
   /* Layout
      - Mobile: vertical stack
@@ -124,7 +113,7 @@
       flex: 0 0 calc((100% - var(--gap) - var(--peek)) / 2); /* ~2.5 visible */
       scroll-snap-align: start;
     }
-    
+
   }
 
   @media (min-width: 1024px){
