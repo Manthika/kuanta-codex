@@ -16,7 +16,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<BaseHead title={title} description={description} />
 		<style>
 			main {
-				width: calc(100% - 2em);
+				width: 100%;
 				max-width: 100%;
 				margin: 0;
 			}
@@ -30,27 +30,54 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				box-shadow: var(--box-shadow);
 			}
 			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
 				padding: 1em;
-				color: rgb(var(--gray-dark));
 			}
+
+			@media (min-width:768px){
+				.prose {
+					padding: 3em;
+				}
+			}
+
 			.title {
 				margin-bottom: 1em;
 				padding: 1em 0;
-				text-align: center;
+				text-align: left;
 				line-height: 1;
 			}
 			.title h1 {
-				margin: 0 0 0.5em 0;
+				color: #000001;
+				font-family: "VITRO CORE";
+				font-size: 32px;
+				font-style: normal;
+				font-weight: 900;
+				line-height: 110%; /* 35.2px */
+				letter-spacing: -0.32px;
+				margin-bottom: 32px;
 			}
 			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
+				color: #565660;
+				font-family: Inter;
+				font-size: 18px;
+				font-style: normal;
+				font-weight: 600;
+				line-height: 110%; /* 19.8px */
+				letter-spacing: -0.18px;
+				margin-bottom: 32px;
 			}
 			.last-updated-on {
 				font-style: italic;
+			}
+
+
+			.crumbs{ display:none; gap:8px; align-items:center; font:600 12px/1.4 Inter, system-ui, sans-serif; color:var(--muted); margin-bottom: 32px; }
+			.crumbs a{ color:var(--muted); text-decoration:none; }
+			.crumbs a:hover{ color:var(--ink); }
+			.crumbs__static{ display:none; }          /* never show */
+			.crumbs__links{ display:none; }
+			@media (min-width:768px){
+				.crumbs{ display:flex; }
+				.crumbs__links{ display:flex; color:#373C56; font-family:Inter; font-size:16px; font-weight:500; line-height:110%; letter-spacing:-0.16px; }
 			}
 		</style>
 	</head>
@@ -59,22 +86,23 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<Header />
 		<main>
 			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
 				<div class="prose">
 					<div class="title">
+
+						<nav class="crumbs" aria-label="Breadcrumb">
+						<div class="crumbs__links">
+							<a href="/">Home</a>
+							<span>&nbsp;&gt;&nbsp;</span>
+							<a href="/blog">Blog</a>
+							<span>&nbsp;&gt;&nbsp;</span>
+							<span aria-current="page">{title}</span>
+						</div>
+						</nav>
+
+						<h1>{title}</h1>
 						<div class="date">
 							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
 						</div>
-						<h1>{title}</h1>
 						<hr />
 					</div>
 					<slot />

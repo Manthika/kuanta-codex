@@ -31,30 +31,45 @@ const posts = (await getCollection('blog'))
       @media (min-width:768px){ :root{ --xpad:32px; } }
       @media (min-width:1024px){ :root{ --xpad:50px; } }
 
+      /* Global safety: prevent horizontal scroll */
+      *,
+      *::before,
+      *::after{ box-sizing:border-box; }
+      html, body{ overflow-x:hidden; }
+
       body{ background:linear-gradient(180deg,#F7F8FC, #FDFDFF 30%); color:var(--ink); }
       main{ width:min(var(--max),100%); margin:0 auto; padding:24px var(--xpad) 80px; }
 
       /* ===== Breadcrumb + search ===== */
       .bar{
-        display:grid; grid-template-columns: 1fr auto; align-items:center;
-        gap:16px; margin-bottom:24px;
+        display:grid;
+        grid-template-columns: 1fr;   /* stack on mobile */
+        align-items:center;
+        gap:12px;
+        margin-bottom:24px;
       }
-      .crumbs{ display:flex; gap:8px; align-items:center; font:600 12px/1.4 Inter, system-ui, sans-serif; color:var(--muted); }
+      @media (min-width:768px){
+        .bar{
+          grid-template-columns: 1fr auto; /* two cols on tablet+ */
+          gap:16px;
+        }
+      }
+
+      /* Breadcrumbs: hidden on mobile; static variant never shown */
+      .crumbs{ display:none; gap:8px; align-items:center; font:600 12px/1.4 Inter, system-ui, sans-serif; color:var(--muted); }
       .crumbs a{ color:var(--muted); text-decoration:none; }
       .crumbs a:hover{ color:var(--ink); }
-      .crumbs__static{
-        display:block; color:#373C56; font-family:Inter; font-size:16px; font-style:normal;
-        font-weight:500; line-height:110%; letter-spacing:-0.16px;
+      .crumbs__static{ display:none; }          /* never show */
+      .crumbs__links{ display:none; }
+      @media (min-width:768px){
+        .crumbs{ display:flex; }
+        .crumbs__links{ display:flex; color:#373C56; font-family:Inter; font-size:16px; font-weight:500; line-height:110%; letter-spacing:-0.16px; }
       }
-      .crumbs__links{
-        display:none; color:#373C56; font-family:Inter; font-size:16px; font-style:normal;
-        font-weight:500; line-height:110%; letter-spacing:-0.16px;
-      }
-      @media (min-width:768px){ .crumbs__static{ display:none; } .crumbs__links{ display:flex; } }
 
       .search{ position:relative; }
       .search input{
-        width:min(340px, 70vw);
+        width:100%;
+        max-width:340px;                  /* cap on larger screens */
         height:40px;
         border:1px solid var(--line);
         border-radius:10px;
@@ -72,15 +87,27 @@ const posts = (await getCollection('blog'))
       .search svg{ position:absolute; left:10px; top:50%; transform:translateY(-50%); opacity:.6; }
 
       /* ===== Posts ===== */
-      .list{ display:grid; gap:40px; border:1px solid rgba(0,0,0,0.10); }
+      .list{
+        display:grid;
+        gap:24px;                             /* smaller gap mobile */
+        border:1px solid rgba(0,0,0,0.10);
+        padding-inline:12px;                  /* provides inner gutter */
+      }
+      @media (min-width:768px){
+        .list{
+          gap:40px;
+          padding-inline:24px;
+        }
+      }
+
       .post{
         background:var(--bg);
-        border-radius:0px;
+        border-radius:0;
         padding:32px 0;
-		margin: 0 32px;
+        margin:0;                             /* was 0 32px (caused overflow) */
         position:relative;
         overflow:hidden;
-		border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+        border-bottom:1px solid rgba(0, 0, 0, 0.10);
         transition: box-shadow .15s ease, border-color .15s ease, transform .05s ease;
       }
       .post__head{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
@@ -105,12 +132,20 @@ const posts = (await getCollection('blog'))
         letter-spacing:-0.18px;
       }
 
-      /* Description — per spec (single-line ellipsis) */
+      /* Description — per spec (single-line on larger; wrap on tiny screens) */
       .post__desc{
         margin:0 0 12px 0;
         color:#646471;
         font:400 clamp(14px, 2.2vw, 18px)/160% Inter, system-ui, sans-serif;
         overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+      }
+      @media (max-width:479.98px){
+        .post__desc{
+          white-space:normal;
+          display:-webkit-box;
+          -webkit-line-clamp:2;
+          -webkit-box-orient:vertical;
+        }
       }
 
       /* Hashtags — optional */
@@ -140,7 +175,7 @@ const posts = (await getCollection('blog'))
         .post:hover .post__cta{ display:flex; }
       }
 
-      .divider{ margin:0 32px; }
+      .divider{ margin:0 clamp(16px, 6vw, 80px); } /* safe margins */
     </style>
 
     <!-- Only pagination styles are global -->
@@ -393,8 +428,6 @@ const posts = (await getCollection('blog'))
       matchMedia('(max-width: 767.98px)').addEventListener?.('change', () => renderList());
 
       renderList();
-
-	  
     </script>
   </body>
 </html>

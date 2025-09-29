@@ -1,8 +1,9 @@
 ---
-title: 'Markdown Style Guide'
+title: 'H1 Data Centers: The Core of AI Infrastructure'
 description: 'Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.'
 pubDate: 'Jun 19 2024'
-heroImage: '../../assets/blog-placeholder-1.jpg'
+heroImage: '../../assets/blog-header.svg'
+draft: false
 ---
 
 Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.

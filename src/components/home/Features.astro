@@ -92,15 +92,29 @@
 </section>
 
 <style>
-  .cards-section{ padding: clamp(28px, 6vw, 80px) 0; background:#FDFDFF; }
+  .cards-section{ padding: clamp(28px, 6vw, 80px) 0; background:#FDFDFF; margin-bottom: 120px; }
 
-  .container{
-    width: min(1200px, 100%);
-    margin-inline: auto;
-    padding-inline: 20px;
-  }
-  @media (min-width: 768px){ .container{ padding-inline: 32px; } }
-  @media (min-width:1024px){ .container{ padding-inline: 50px; } }
+/* Mobile-first, safe container */
+.container{
+  /* change this if you want a different cap */
+  --container-max: 1200px;
+
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  /* responsive gutters without media queries */
+  padding-inline: clamp(16px, 4vw, 50px);
+}
+
+/* (Optional) tweak gutters at larger breakpoints if you want */
+@media (min-width: 768px){
+  .container{ padding-inline: clamp(24px, 4vw, 50px); }
+}
+@media (min-width: 1024px){
+  .container{ padding-inline: clamp(32px, 3vw, 50px); }
+}
+
 
   /* Heading (your spec) */
   .cards-title{
@@ -194,7 +208,7 @@
   .feature-title{
     margin: 0;
     color: #4A3BFF;
-    font-family: "VITRO CORE TTF", system-ui, sans-serif;
+    font-family: "VITRO CORE"
     font-size: clamp(18px, 2.4vw, 22px);
     font-weight: 900;
     line-height: 150%;
