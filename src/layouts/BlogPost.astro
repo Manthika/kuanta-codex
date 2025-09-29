@@ -1,17 +1,21 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from '../i18n';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, lang } = Astro.props;
+const locale = (lang ?? FALLBACK_LOCALE) as SupportedLocale;
+const blogCopy = getTranslations(locale).blog;
+const homeHref = locale === FALLBACK_LOCALE ? '/' : `/${locale}`;
+const blogHref = locale === FALLBACK_LOCALE ? '/blog' : `/${locale}/blog`;
 ---
 
-<html lang="en">
+<html lang={locale}>
 	<head>
 		<BaseHead title={title} description={description} />
 		<style>
@@ -89,14 +93,14 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				<div class="prose">
 					<div class="title">
 
-						<nav class="crumbs" aria-label="Breadcrumb">
-						<div class="crumbs__links">
-							<a href="/">Home</a>
-							<span>&nbsp;&gt;&nbsp;</span>
-							<a href="/blog">Blog</a>
-							<span>&nbsp;&gt;&nbsp;</span>
-							<span aria-current="page">{title}</span>
-						</div>
+                                                <nav class="crumbs" aria-label="Breadcrumb">
+                                                <div class="crumbs__links">
+                                                        <a href={homeHref}>{blogCopy.breadcrumbs.home}</a>
+                                                        <span>&nbsp;&gt;&nbsp;</span>
+                                                        <a href={blogHref}>{blogCopy.breadcrumbs.blog}</a>
+                                                        <span>&nbsp;&gt;&nbsp;</span>
+                                                        <span aria-current="page">{title}</span>
+                                                </div>
 						</nav>
 
 						<h1>{title}</h1>

@@ -5,15 +5,27 @@ import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
 import FormattedDate from '../../../components/FormattedDate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts';
+import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from '../../../i18n';
+
+const locale = (Astro.currentLocale ?? FALLBACK_LOCALE) as SupportedLocale;
+const blogCopy = getTranslations(locale).blog;
 
 const posts = (await getCollection('blog'))
+  .filter((post) => post.data.lang === locale && post.data.draft !== true)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const blogBasePath = locale === FALLBACK_LOCALE ? '/blog' : `/${locale}/blog`;
+const homeHref = locale === FALLBACK_LOCALE ? '/' : `/${locale}`;
+const pageTitle = blogCopy.metaTitle ?? blogCopy.breadcrumbs.blog;
+const breadcrumbsStatic = `${blogCopy.breadcrumbs.home} > ${blogCopy.breadcrumbs.blog}`;
+const searchPlaceholder = blogCopy.search.placeholder ?? '';
+const readLabel = blogCopy.cta.label ?? 'Read';
+const readAriaPrefix = blogCopy.cta.ariaLabelPrefix ?? readLabel;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
-    <BaseHead title={`Blog • ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+    <BaseHead title={`${pageTitle} • ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 
     <!-- Scoped styles (default Astro scoping) -->
     <style>
@@ -264,11 +276,11 @@ const posts = (await getCollection('blog'))
       <!-- Top bar: breadcrumb + search -->
       <div class="bar">
         <nav class="crumbs" aria-label="Breadcrumb">
-          <div class="crumbs__static">Home &gt; Blog</div>
+          <div class="crumbs__static">{breadcrumbsStatic}</div>
           <div class="crumbs__links">
-            <a href="/">Home</a>
+            <a href={homeHref}>{blogCopy.breadcrumbs.home}</a>
             <span>&nbsp;&gt;&nbsp;</span>
-            <span aria-current="page">Blog</span>
+            <span aria-current="page">{blogCopy.breadcrumbs.blog}</span>
           </div>
         </nav>
 
@@ -276,7 +288,7 @@ const posts = (await getCollection('blog'))
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M10.3686 10.3686C10.8056 9.93148 11.1524 9.41258 11.3889 8.84151C11.6255 8.27043 11.7472 7.65836 11.7472 7.04023C11.7472 6.4221 11.6255 5.81002 11.3889 5.23895C11.1524 4.66787 10.8056 4.14898 10.3686 3.71189C9.93148 3.27481 9.41258 2.9281 8.84151 2.69155C8.27043 2.455 7.65835 2.33325 7.04023 2.33325C6.4221 2.33325 5.81002 2.455 5.23895 2.69155C4.66787 2.9281 4.14898 3.27481 3.71189 3.71189C2.82916 4.59462 2.33325 5.79186 2.33325 7.04023C2.33325 8.28859 2.82916 9.48583 3.71189 10.3686C4.59462 11.2513 5.79186 11.7472 7.04023 11.7472C8.28859 11.7472 9.48583 11.2513 10.3686 10.3686ZM10.3686 10.3686L13.3332 13.3332" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <input id="search" type="search" placeholder="Enter keywords" />
+          <input id="search" type="search" placeholder={searchPlaceholder} />
         </div>
       </div>
 
@@ -284,7 +296,8 @@ const posts = (await getCollection('blog'))
       <section class="list" id="list">
         {
           posts.map((post) => {
-            const href = `/blog/${post.id}/`;
+            const slug = post.data.translationKey;
+            const href = `${blogBasePath}/${slug}/`;
             const hashtags = (post.data.hashtags ?? []);
             const searchBlob = [
               post.data.title,
@@ -300,8 +313,8 @@ const posts = (await getCollection('blog'))
                     </h3>
 
                     <!-- Desktop hover CTA -->
-                    <a class="post__cta" href={href} aria-label={`Read ${post.data.title}`}>
-                      <span class="post__cta-text">READ</span>
+                    <a class="post__cta" href={href} aria-label={`${readAriaPrefix} ${post.data.title}`}>
+                      <span class="post__cta-text">{readLabel}</span>
                       <span class="post__cta-arrow" aria-hidden="true">
                         <svg xmlns="http://www.w3.org/2000/svg" width="67" height="45" viewBox="0 0 67 45" fill="none">
                           <path d="M33.2457 45L28.7312 40.8817L51.8757 25.2623H0.5L1.70809 19.7377H54.6098L37.4422 3.4654L42.7197 0L66.5 22.5L33.2457 45Z" fill="white"/>
