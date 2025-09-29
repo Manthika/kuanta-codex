@@ -3,62 +3,57 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from '../i18n';
 
+const locale = (Astro.currentLocale ?? FALLBACK_LOCALE) as SupportedLocale;
+const translations = getTranslations(locale);
 const intro = {
-  heading: "POWERED BY",
+  heading: translations.useCases.hero.title,
   heroImg: "/images/use-cases/use-cases-hero.jpg",
 };
 
-const cases = [
+const caseMeta = [
   {
     id: "daishin",
-    titleLines: ["Daishin Securities", "Kuanta Solutions"],
-    desc:
-      "Discover Kuanta’s Features, built with reliable and advanced architecture for volatile markets, offering a consistent single messaging framework and flexible data pipelines.",
     image: "/images/use-cases/daishin.jpg",
-    href: "#",
     reverseOnDesktop: false,
+    content: translations.useCases.case1,
   },
   {
     id: "woori",
-    titleLines: ["WOORI INVESTMENT", "SECURITIES Kuanta", "Solutions"],
-    desc:
-      "Discover Kuanta’s Features, built with reliable and advanced architecture for volatile markets, offering a consistent single messaging framework and flexible data pipelines.",
     image: "/images/use-cases/woori.jpg",
-    href: "#",
     reverseOnDesktop: true,
+    content: translations.useCases.case2,
   },
 ];
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
+<html lang={locale}>
+        <head>
+                <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+        </head>
 
   <body>
     <Header />
 
     <!-- HERO -->
-    <section class="hero" role="img" aria-label="Powered by">
+    <section class="hero" role="img" aria-label={intro.heading}>
       <div class="container"><h1 class="hero__title">{intro.heading}</h1></div>
     </section>
 
     <!-- CASES -->
     <main class="cases">
-      {cases.map((c) => (
+      {caseMeta.map((c) => (
         <section class={"case" + (c.reverseOnDesktop ? " case--reverse" : "")} id={c.id}>
           <figure class="case__media">
-            <img src={c.image} alt={`${c.titleLines[0]} showcase`} />
+            <img src={c.image} alt={`${c.content.title} showcase`} />
           </figure>
 
           <div class="case__content">
-            <h2 class="case__title">
-              {c.titleLines.map((line) => (<span class="case__line">{line}</span>))}
-            </h2>
-            <p class="case__desc">{c.desc}</p>
-            <a href={c.href} class="btn">Learn</a>
+            <h2 class="case__title">{c.content.title}</h2>
+            <p class="case__desc">{c.content.description}</p>
+            <a href="#" class="btn">{c.content.cta}</a>
           </div>
         </section>
       ))}
@@ -151,14 +146,19 @@ const cases = [
     object-fit: cover;
   }
 
-  .case__title{ margin: 0 0 10px; }
-  .case__title .case__line{
-    display: block;
+  .case__title{
+    margin: 0 0 10px;
     background: linear-gradient(90deg, #000C4A 0%, #4A3BFF 95.6%);
     background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     font-family: "Vitro Core", "Russo One", system-ui, sans-serif;
-    font-size: 36px; font-weight: 900; line-height: 160%; text-transform: capitalize;
+    font-size: clamp(28px, 4vw, 36px);
+    font-weight: 900;
+    line-height: 160%;
     letter-spacing: -0.01em;
+    text-transform: capitalize;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
   }
 
   .case__desc{

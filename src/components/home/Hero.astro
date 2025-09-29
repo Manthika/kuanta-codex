@@ -1,18 +1,18 @@
 ---
 /* No props for now; uses the fixed copy & image you provided */
+import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from "../../i18n";
+
+const locale = (Astro.currentLocale ?? FALLBACK_LOCALE) as SupportedLocale;
+const hero = getTranslations(locale).home.hero;
 ---
 <section class="home-hero" aria-labelledby="home-hero-title">
   <div class="hero__inner">
     <h1 id="home-hero-title" class="hero__title">
-      PROGRAMMABLE <br /> MESSAGE <br /> ROUTER
+      {hero.title}
     </h1>
 
-    <p class="hero__desc">
-      Kuanta PMR helps you solve integration problems by immediately applying best
-      practices through the latest message patterns derived from microservice architecture.
-      The new low-latency architecture and programmable messaging environment can actively
-      respond to any integration and deployment strategy required.
-    </p>
+    <p class="hero__desc">{hero.description}</p>
+    <p class="hero__tagline">{hero.subTagline}</p>
   </div>
 </section>
 
@@ -96,11 +96,27 @@
   text-wrap: balance;
 }
 
+.hero__tagline{
+  margin: 0;
+  color: rgba(253,253,255,0.85);
+  font-family: "Vitro Core", Inter, system-ui, sans-serif;
+  font-size: clamp(14px, 3vw, 20px);
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  max-inline-size: 60ch;
+  text-align: center;
+}
+
 /* Tablet+ */
 @media (min-width: 768px){
   .hero__desc{
     font-size: clamp(16px, 2.2vw, 20px);
     line-height: 1.45;
+  }
+  .hero__tagline{
+    font-size: clamp(15px, 2.1vw, 18px);
   }
 }
 
@@ -113,6 +129,7 @@
     padding-block: clamp(48px, 6vw, 96px);
   }
   .hero__title{ max-inline-size: 12ch; }
+  .hero__tagline{ text-align: left; }
 }
 
 /* Safety for full-bleed */

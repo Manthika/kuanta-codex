@@ -1,13 +1,15 @@
 ---
 /* 3-card section; uses your images and typography */
+import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from "../../i18n";
+
+const locale = (Astro.currentLocale ?? FALLBACK_LOCALE) as SupportedLocale;
+const translations = getTranslations(locale);
+const cards = translations.home.cards;
+const heroTagline = translations.home.hero.subTagline;
 ---
 <section class="cards-section" aria-labelledby="cards-title">
   <div class="container">
-    <h2 id="cards-title" class="cards-title">
-      Low-Latency and High-Performance,<br />
-      Yet Programmable,<br />
-      Making it Flexible.
-    </h2>
+    <h2 id="cards-title" class="cards-title">{heroTagline}</h2>
   </div>
 
   <div class="container">
@@ -17,12 +19,9 @@
         <article class="card">
           <img class="card__img" src="/images/home/pmr.jpg" alt="PMR preview" />
           <div class="card__body">
-            <h3 class="card__title">PMR</h3>
-            <p class="card__desc">
-              Flexible configuration schemes and programming interfaces allow you to design a single
-              message architecture that responds consistently to all messages.
-            </p>
-            <a class="card__more" href="#">Read more →</a>
+            <h3 class="card__title">{cards.pmr.title}</h3>
+            <p class="card__desc">{cards.pmr.description}</p>
+            <a class="card__more" href="#">{cards.pmr.cta} →</a>
           </div>
         </article>
 
@@ -30,12 +29,9 @@
         <article class="card">
           <img class="card__img" src="/images/home/kas.jpg" alt="KAS preview" />
           <div class="card__body">
-            <h3 class="card__title">KAS</h3>
-            <p class="card__desc">
-              A micro-application service that supports vertical/horizontal unit business expansion
-              without restrictions on cloud and on-premises.
-            </p>
-            <a class="card__more" href="#">Read more →</a>
+            <h3 class="card__title">{cards.kas.title}</h3>
+            <p class="card__desc">{cards.kas.description}</p>
+            <a class="card__more" href="#">{cards.kas.cta} →</a>
           </div>
         </article>
 
@@ -43,12 +39,9 @@
         <article class="card">
           <img class="card__img" src="/images/home/broker.jpg" alt="Broker preview" />
           <div class="card__body">
-            <h3 class="card__title">BROKER</h3>
-            <p class="card__desc">
-              A Pub/Sub-based message broker supporting diverse topologies, high-speed messaging
-              processing, and reliable recovery and retransmission.
-            </p>
-            <a class="card__more" href="#">Read more →</a>
+            <h3 class="card__title">{cards.broker.title}</h3>
+            <p class="card__desc">{cards.broker.description}</p>
+            <a class="card__more" href="#">{cards.broker.cta} →</a>
           </div>
         </article>
       </div>
