@@ -1,8 +1,11 @@
 ---
-title: 'Second post'
-description: 'Lorem ipsum dolor sit amet'
-pubDate: 'Jul 15 2022'
-heroImage: '../../assets/blog-placeholder-4.jpg'
+title: 'Third post'
+description: '(본문첫줄) Call out a feature, benefit, or value of your site or product that can stand on its own.'
+pubDate: 'Jul 22 2022'
+heroImage: '../../../assets/blog-header.svg'
+hashtags: ['this', 'that']
+lang: en
+translationKey: third-post
 draft: false
 ---
 

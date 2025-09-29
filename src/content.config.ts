@@ -12,9 +12,11 @@ const blog = defineCollection({
 			// Transform string to Date object
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
-			heroImage: image().optional(),
-			hashtags: z.any().optional(),
-			draft: z.boolean().optional(),
+                        heroImage: image().optional(),
+                        hashtags: z.any().optional(),
+                        lang: z.enum(['en', 'ko']),
+                        translationKey: z.string(),
+                        draft: z.boolean().optional(),
 		}),
 });
 

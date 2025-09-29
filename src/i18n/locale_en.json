@@ -105,5 +105,19 @@
       "rights": "© billycrew 2023. All rights reserved.",
       "top": "TOP ▲"
     }
+  },
+  "blog": {
+    "metaTitle": "Blog",
+    "breadcrumbs": {
+      "home": "Home",
+      "blog": "Blog"
+    },
+    "search": {
+      "placeholder": "Enter keywords"
+    },
+    "cta": {
+      "label": "READ",
+      "ariaLabelPrefix": "Read"
+    }
   }
 }
