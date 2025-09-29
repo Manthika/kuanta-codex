@@ -1,0 +1,109 @@
+{
+  "nav": {
+    "getStarted": "Get started",
+    "docs": "Docs",
+    "product": "Product",
+    "productMenu": {
+      "pmr": "PMR",
+      "kas": "KAS",
+      "broker": "BROKER",
+      "kc": "KC"
+    },
+    "useCases": "Use Cases",
+    "blog": "Blog",
+    "download": "Download",
+    "language": {
+      "en": "ENG",
+      "ko": "한국어"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "PROGRAMMABLE MESSAGE ROUTER",
+      "description": "Kuanta PMR helps you solve integration problems by immediately applying best practices through the latest message patterns derived from microservice architecture. The new low‑latency architecture and programmable messaging environment can actively respond to any integration and deployment strategy required.",
+      "subTagline": "Low‑Latency and High‑Performance, Yet Programmable, Making it Flexible."
+    },
+    "cards": {
+      "pmr": {
+        "title": "PMR",
+        "description": "Flexible configuration schemes and programming interfaces allow you to design a single message architecture that responds consistently to all messages.",
+        "cta": "Read more"
+      },
+      "kas": {
+        "title": "KAS",
+        "description": "A micro‑application service that supports vertical/horizontal unit business expansion without restrictions on cloud and on‑premises.",
+        "cta": "Read more"
+      },
+      "broker": {
+        "title": "BROKER",
+        "description": "A Pub/Sub‑based message broker supporting diverse topologies, high‑speed messaging processing, and reliable recovery and retransmission. Configure your message broker to suit your needs.",
+        "cta": "Read more"
+      }
+    },
+    "features": {
+      "title": "Features",
+      "tagline": "Technology That Lead The Way For Challenging Environments",
+      "description": "Learn about the core features of Kuanta technology, which offers stability and superior technology even in a rapidly changing market environment, a consistent messaging architecture, and flexible application across diverse environments without constraints. You can immediately apply it to your service environment.",
+      "items": {
+        "engineerFriendly": {
+          "title": "Engineer‑friendly",
+          "description": "Intuitive CLI and TUI for engineers\nFast and accurate operations"
+        },
+        "integrateExisting": {
+          "title": "Integrate with existing systems",
+          "description": "Flexible integration with various legacy and external systems"
+        },
+        "messageAnalysis": {
+          "title": "Message analysis and statistics",
+          "description": "Analyze collected and refined, reliable real‑time data"
+        },
+        "hierarchicalDistribution": {
+          "title": "Hierarchical distribution & low‑latency messaging",
+          "description": "Fast and reliable delivery through system‑wide technology"
+        }
+      }
+    },
+    "news": {
+      "title": "NEWS/BLOG",
+      "cards": {
+        "headline": "EFFICIENT TRADING SOLUTIONS",
+        "title": "Title",
+        "description": "Call out a feature, benefit, or value of your site or product that can stand on its own.",
+        "cta": "Read more"
+      }
+    },
+    "footer": {
+      "companyName": "Billycrew",
+      "productName": "Kuanta Solution",
+      "brand": "Kuanta",
+      "address": "17, Gukjegeumyung‑ro 2‑gil, Yeongdeungpo‑gu, Seoul, Republic of Korea",
+      "businessRegistrationNumber": "678‑87‑02665",
+      "rights": "© billycrew 2023. All Rights Reserved.",
+      "top": "TOP ▲"
+    }
+  },
+  "useCases": {
+    "hero": {
+      "title": "POWERED BY"
+    },
+    "case1": {
+      "title": "Daishin Securities Kuanta Solutions",
+      "description": "Discover Kuanta’s Features, built with reliable and advanced architecture for volatile markets, offering a consistent single messaging framework and flexible deployment. Learn more about the core functions of Kuanta technology.",
+      "cta": "Learn"
+    },
+    "case2": {
+      "title": "WOORI INVESTMENT SECURITIES Kuanta Solutions",
+      "description": "Discover Kuanta’s Features, built with reliable and advanced architecture for volatile markets, offering a consistent single messaging framework and flexible deployment. Learn more about the core functions of Kuanta technology.",
+      "cta": "Learn"
+    },
+    "footer": {
+      "companyName": "Billycrew",
+      "productName": "Kuanta Solution",
+      "brand": "Kuanta",
+      "address": "17, Gukjegeumyung‑ro 2‑gil, Yeongdeungpo‑gu, Seoul, Republic of Korea",
+      "businessRegistrationNumber": "678‑87‑02665",
+      "rights": "© billycrew 2023. All Rights Reserved.",
+      "top": "TOP ▲"
+    }
+  }
+}

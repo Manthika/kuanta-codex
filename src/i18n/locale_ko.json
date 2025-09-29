@@ -1,0 +1,109 @@
+{
+  "nav": {
+    "getStarted": "시작하기",
+    "docs": "문서",
+    "product": "제품",
+    "productMenu": {
+      "pmr": "PMR",
+      "kas": "KAS",
+      "broker": "BROKER",
+      "kc": "KC"
+    },
+    "useCases": "사례 사례",
+    "blog": "블로그",
+    "download": "다운로드",
+    "language": {
+      "en": "ENG",
+      "ko": "한국어"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "PROGRAMMABLE MESSAGE ROUTER",
+      "description": "마이크로 서비스 아키텍처에서 비롯된 최신 메시지 패턴을 통해 베스트 프랙티스를 즉시 적용하여 통합 문제를 해결할 수 있도록 도와줍니다. 새로운 저지연 아키텍처와 프로그래밍 가능한 메시징 환경은 어떤 통합 및 배포 전략에도 적극적으로 대응할 수 있습니다.",
+      "subTagline": "저지연과 고성능, 그리고 프로그래밍 가능한 환경으로 인해 메시징에 유연성을 제공합니다."
+    },
+    "cards": {
+      "pmr": {
+        "title": "PMR",
+        "description": "유연한 설정 체계와 프로그래밍 인터페이스를 통해 모든 메시지에 일관되게 반응하는 단일 메시징 아키텍처를 설계할 수 있습니다.",
+        "cta": "Read more"
+      },
+      "kas": {
+        "title": "KAS",
+        "description": "수직/수평 단위 업무 확장을 제한 없이 지원하는 마이크로 애플리케이션 서비스로, 클라우드와 온프레미스에서 제약 없이 확장할 수 있습니다.",
+        "cta": "Read more"
+      },
+      "broker": {
+        "title": "BROKER",
+        "description": "다양한 토폴로지, 고속 메시징 처리, 안정적인 복구와 재전송을 지원하는 Pub/Sub 기반 메시지 브로커입니다. 메시지 브로커를 필요에 맞게 구성하세요.",
+        "cta": "Read more"
+      }
+    },
+    "features": {
+      "title": "핵심 기능",
+      "tagline": "Technology That Lead The Way For Challenging Environments",
+      "description": "급변하는 시장 환경에서도 안정적이고 우수한 기술력으로, 일관된 메시징 아키텍처와 다양한 환경에서도 제약 없이 적용할 수 있는 유연한 쿠안타 기술의 핵심 기능에 대해 알아보세요. 서비스 환경에도 즉시 적용할 수 있습니다.",
+      "items": {
+        "engineerFriendly": {
+          "title": "엔지니어 친화적",
+          "description": "엔지니어를 위한 직관적인 CLI 및 TUI\n빠르고 정확한 서비스 운영 제공"
+        },
+        "integrateExisting": {
+          "title": "기존 시스템과 통합",
+          "description": "다양한 레거시 및 외부 시스템과의 유연한 연동으로 일관된 운영 환경 구축"
+        },
+        "messageAnalysis": {
+          "title": "메시지 분석 및 통계",
+          "description": "수집된 데이터를 분석하여 신뢰성 높은 실시간 데이터를 제공합니다"
+        },
+        "hierarchicalDistribution": {
+          "title": "계층적 배포 & 저지연 메시징",
+          "description": "시스템 전반에 걸친 계층적 메시징 기술을 통해 빠르고 안정적인 메시징을 제공합니다"
+        }
+      }
+    },
+    "news": {
+      "title": "NEWS/BLOG",
+      "cards": {
+        "headline": "EFFICIENT TRADING SOLUTIONS",
+        "title": "기사 제목",
+        "description": "블록체인 기술이 서비스의 효율성을 크게 향상할 수 있는 기능, 예제 또는 텍스트를 강조하세요.",
+        "cta": "Read more"
+      }
+    },
+    "footer": {
+      "companyName": "㈜빌리크루",
+      "productName": "Kuanta 솔루션",
+      "brand": "Kuanta",
+      "address": "서울특별시 영등포구 국제금융2길 17, 6층 608호 (여의도동, 시티플라자)",
+      "businessRegistrationNumber": "678-87-02665",
+      "rights": "© billycrew 2023. All Rights Reserved.",
+      "top": "TOP ▲"
+    }
+  },
+  "useCases": {
+    "hero": {
+      "title": "POWERED BY"
+    },
+    "case1": {
+      "title": "대신증권 Kuanta 솔루션",
+      "description": "변동성이 큰 시장에서도 안정적이고 우수한 기술력으로, 일관된 단일 메시징 아키텍처와 다양한 환경에서도 유연한 쿠안타 기술의 핵심 기능에 대해 알아보세요.",
+      "cta": "Learn"
+    },
+    "case2": {
+      "title": "우리투자증권 Kuanta 솔루션",
+      "description": "변동성이 큰 시장에서도 안정적이고 우수한 기술력으로, 일관된 단일 메시징 아키텍처와 다양한 환경에서도 유연한 쿠안타 기술의 핵심 기능에 대해 알아보세요.",
+      "cta": "Learn"
+    },
+    "footer": {
+      "companyName": "㈜빌리크루",
+      "productName": "Kuanta 솔루션",
+      "brand": "Kuanta",
+      "address": "서울특별시 영등포구 국제금융2길 17, 6층 608호 (여의도동, 시티플라자)",
+      "businessRegistrationNumber": "678-87-02665",
+      "rights": "© billycrew 2023. All Rights Reserved.",
+      "top": "TOP ▲"
+    }
+  }
+}
