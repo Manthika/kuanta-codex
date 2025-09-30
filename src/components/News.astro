@@ -3,12 +3,14 @@ import { getCollection } from 'astro:content';
 
 import { FALLBACK_LOCALE, getTranslations, resolveLocale } from "../i18n";
 
+
 const locale = resolveLocale(Astro.currentLocale);
 const posts = (await getCollection('blog'))
   .filter((post) => {
     const entryLocale = post.data.lang ?? post.slug.split('/')[0];
     return resolveLocale(entryLocale) === locale && post.data.draft !== true;
   })
+
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
 

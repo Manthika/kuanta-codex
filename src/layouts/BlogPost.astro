@@ -6,10 +6,13 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { FALLBACK_LOCALE, getTranslations, resolveLocale } from '../i18n';
 
+
 type Props = CollectionEntry<'blog'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage, lang } = Astro.props;
+
 const locale = resolveLocale(lang);
+
 const blogCopy = getTranslations(locale).blog;
 const homeHref = locale === FALLBACK_LOCALE ? '/' : `/${locale}`;
 const blogHref = locale === FALLBACK_LOCALE ? '/blog' : `/${locale}/blog`;
