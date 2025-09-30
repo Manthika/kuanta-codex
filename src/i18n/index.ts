@@ -11,10 +11,14 @@ export type Translations = (typeof dictionaries)[SupportedLocale];
 
 export const FALLBACK_LOCALE: SupportedLocale = 'en';
 
-export function getTranslations(locale: string | undefined): Translations {
+export function resolveLocale(locale: string | undefined): SupportedLocale {
   if (locale && locale in dictionaries) {
-    return dictionaries[locale as SupportedLocale];
+    return locale as SupportedLocale;
   }
 
-  return dictionaries[FALLBACK_LOCALE];
+  return FALLBACK_LOCALE;
+}
+
+export function getTranslations(locale: string | undefined): Translations {
+  return dictionaries[resolveLocale(locale)];
 }

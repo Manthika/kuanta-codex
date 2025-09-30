@@ -1,8 +1,8 @@
 ---
 /* 3-card section; uses your images and typography */
-import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from "../../i18n";
+import { getTranslations, resolveLocale } from "../../i18n";
 
-const locale = (Astro.currentLocale ?? FALLBACK_LOCALE) as SupportedLocale;
+const locale = resolveLocale(Astro.currentLocale);
 const features = getTranslations(locale).home.features;
 ---
 <section class="cards-section" aria-labelledby="cards-title">

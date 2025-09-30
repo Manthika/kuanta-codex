@@ -1,8 +1,8 @@
 ---
 /* No props for now; uses the fixed copy & image you provided */
-import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from "../../i18n";
+import { getTranslations, resolveLocale } from "../../i18n";
 
-const locale = (Astro.currentLocale ?? FALLBACK_LOCALE) as SupportedLocale;
+const locale = resolveLocale(Astro.currentLocale);
 const hero = getTranslations(locale).home.hero;
 ---
 <section class="home-hero" aria-labelledby="home-hero-title">

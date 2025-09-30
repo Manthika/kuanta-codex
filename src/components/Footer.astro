@@ -1,7 +1,7 @@
 ---
-import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from "../i18n";
+import { getTranslations, resolveLocale } from "../i18n";
 
-const locale = (Astro.currentLocale ?? FALLBACK_LOCALE) as SupportedLocale;
+const locale = resolveLocale(Astro.currentLocale);
 const translations = getTranslations(locale);
 const footer = translations.home.footer ?? translations.useCases.footer;
 const topLabel = footer.top.replace('▲', '').trim();

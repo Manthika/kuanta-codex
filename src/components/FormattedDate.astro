@@ -1,11 +1,16 @@
 ---
+import { resolveLocale } from '../i18n';
+
 interface Props { date: Date; }
 const { date } = Astro.props;
 
-const month = date.toLocaleString('en-US', { month: 'short' }); // e.g., "Jul"
-const day   = date.getDate();                                   // 23
-const year  = date.getFullYear();                                // 2025
-const display = `${month}/${day}/${year}`;
+const locale = resolveLocale(Astro.currentLocale);
+const formatterLocale = locale === 'ko' ? 'ko-KR' : 'en-US';
+const options: Intl.DateTimeFormatOptions =
+  locale === 'ko'
+    ? { year: 'numeric', month: 'long', day: 'numeric' }
+    : { year: 'numeric', month: 'short', day: 'numeric' };
+const display = new Intl.DateTimeFormat(formatterLocale, options).format(date);
 ---
 
 <time datetime={date.toISOString()}>

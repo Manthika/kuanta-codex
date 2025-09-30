@@ -1,16 +1,20 @@
 ---
 import { getCollection } from 'astro:content';
 
-import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from "../i18n";
+import { FALLBACK_LOCALE, getTranslations, resolveLocale } from "../i18n";
 
+const locale = resolveLocale(Astro.currentLocale);
 const posts = (await getCollection('blog'))
-  .filter((post) => post.data.draft === false)
+  .filter((post) => {
+    const entryLocale = post.data.lang ?? post.slug.split('/')[0];
+    return resolveLocale(entryLocale) === locale && post.data.draft !== true;
+  })
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
 
-const SITE_URL = import.meta.env.SITE_URL || 'http://localhost:4321';
+const SITE_URL = (import.meta.env.SITE_URL || 'http://localhost:4321').replace(/\/$/, '');
+const blogBasePath = locale === FALLBACK_LOCALE ? '/blog' : `/${locale}/blog`;
 
-const locale = (Astro.currentLocale ?? FALLBACK_LOCALE) as SupportedLocale;
 const news = getTranslations(locale).home.news;
 
 const hasPosts = posts.length > 0;
@@ -20,24 +24,29 @@ const hasPosts = posts.length > 0;
 
   {hasPosts ? (
     <ul>
-      {posts.map((post) => (
-        <li>
-          <a href={`${SITE_URL}/blog/${post.id}/`}>
-            <img width={720} height={360} src={`${post.data.heroImage?.src}`} alt="" />
-            <div class="text-container">
-              <h4 class="title">{post.data.title}</h4>
-              <p class="description">{post.data.description}</p>
-              <p class="read-more">{news.cards.cta} →</p>
-            </div>
-          </a>
-        </li>
-      ))}
+      {posts.map((post) => {
+        const slug = post.data.translationKey;
+        const href = `${blogBasePath}/${slug}/`;
+
+        return (
+          <li>
+            <a href={`${SITE_URL}${href}`}>
+              <img width={720} height={360} src={`${post.data.heroImage?.src}`} alt="" />
+              <div class="text-container">
+                <h4 class="title">{post.data.title}</h4>
+                <p class="description">{post.data.description}</p>
+                <p class="read-more">{news.cards.cta} →</p>
+              </div>
+            </a>
+          </li>
+        );
+      })}
     </ul>
   ) : (
     <div class="placeholder">
       <h3 class="placeholder__headline">{news.cards.headline}</h3>
       <p class="placeholder__desc">{news.cards.description}</p>
-      <a class="placeholder__cta" href="#">{news.cards.cta} →</a>
+      <a class="placeholder__cta" href={blogBasePath}>{news.cards.cta} →</a>
     </div>
   )}
 </section>

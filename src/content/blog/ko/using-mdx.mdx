@@ -1,0 +1,33 @@
+---
+title: 'MDX 활용하기'
+description: 'Astro에서 MDX를 활성화하고 컴포넌트를 불러오는 방법을 간단히 소개합니다.'
+pubDate: 'Jun 01 2024'
+heroImage: '../../../assets/blog-placeholder-5.jpg'
+lang: ko
+translationKey: using-mdx
+draft: false
+---
+
+이 테마는 기본으로 [@astrojs/mdx](https://docs.astro.build/en/guides/integrations-guide/mdx/) 통합 기능을 설치해 `astro.config.mjs`에 설정해 두었습니다. MDX를 사용하지 않을 계획이라면 설정 파일에서 해당 통합을 제거해 지원을 비활성화할 수 있습니다.
+
+## 왜 MDX일까요?
+
+MDX는 Markdown에 JavaScript와 JSX 구문을 함께 사용할 수 있도록 확장한 특별한 형식입니다. 이를 활용하면 [Markdown 콘텐츠에 JavaScript와 UI 컴포넌트를 혼합](https://docs.astro.build/en/guides/markdown-content/#mdx-features)하여 인터랙티브 차트나 알림 같은 요소를 삽입할 수 있습니다.
+
+이미 MDX로 작성된 문서가 있다면, 이 통합 기능 덕분에 Astro로의 마이그레이션도 한결 수월해집니다.
+
+## 예시
+
+MDX 안에서 UI 컴포넌트를 가져와 사용하는 방법은 다음과 같습니다. 브라우저에서 이 페이지를 열면 아래에 클릭 가능한 버튼이 표시됩니다.
+
+import HeaderLink from '../../../components/HeaderLink.astro';
+
+<HeaderLink href="#" onclick="alert('clicked!')">
+        MDX에 포함된 컴포넌트
+</HeaderLink>
+
+## 더 알아보기
+
+- [MDX 문법 문서](https://mdxjs.com/docs/what-is-mdx)
+- [Astro 활용 가이드](https://docs.astro.build/en/guides/markdown-content/#markdown-and-mdx-pages)
+- **참고:** 인터랙티브 컴포넌트를 만들려면 여전히 [Client Directives](https://docs.astro.build/en/reference/directives-reference/#client-directives)가 필요합니다. 그렇지 않으면 MDX 내부의 모든 컴포넌트는 기본적으로 정적 HTML(자바스크립트 없음)로 렌더링됩니다.

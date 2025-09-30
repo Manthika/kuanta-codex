@@ -105,5 +105,19 @@
       "rights": "© billycrew 2023. All rights reserved.",
       "top": "TOP ▲"
     }
+  },
+  "blog": {
+    "metaTitle": "블로그",
+    "breadcrumbs": {
+      "home": "홈",
+      "blog": "블로그"
+    },
+    "search": {
+      "placeholder": "검색어를 입력하세요"
+    },
+    "cta": {
+      "label": "읽기",
+      "ariaLabelPrefix": "읽기"
+    }
   }
 }
