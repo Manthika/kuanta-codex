@@ -5,13 +5,16 @@ import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
 import FormattedDate from '../../../components/FormattedDate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts';
-import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from '../../../i18n';
+import { FALLBACK_LOCALE, getTranslations, resolveLocale } from '../../../i18n';
 
-const locale = (Astro.currentLocale ?? FALLBACK_LOCALE) as SupportedLocale;
+const locale = resolveLocale(Astro.currentLocale);
 const blogCopy = getTranslations(locale).blog;
 
 const posts = (await getCollection('blog'))
-  .filter((post) => post.data.lang === locale && post.data.draft !== true)
+  .filter((post) => {
+    const entryLocale = post.data.lang ?? post.slug.split('/')[0];
+    return resolveLocale(entryLocale) === locale && post.data.draft !== true;
+  })
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const blogBasePath = locale === FALLBACK_LOCALE ? '/blog' : `/${locale}/blog`;
 const homeHref = locale === FALLBACK_LOCALE ? '/' : `/${locale}`;

@@ -2,9 +2,9 @@
 /** <Header /> — i18n-ready (EN/KO) */
 import { getRelativeLocaleUrl } from "astro:i18n";
 
-import { FALLBACK_LOCALE, getTranslations, type SupportedLocale } from "../i18n";
+import { getTranslations, resolveLocale } from "../i18n";
 
-const locale = (Astro.currentLocale ?? FALLBACK_LOCALE) as SupportedLocale;
+const locale = resolveLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 
 const LINKS = [
